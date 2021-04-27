@@ -1,0 +1,6 @@
+baseURL = "https://pallahaxi.github.io/calender_deriven_development/"
+languageCode = "ja-jp"
+title = "My New Hugo Site"
+theme = "book"
+publishDir = "docs"
+canonifyurls = true
