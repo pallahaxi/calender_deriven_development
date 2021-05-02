@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on My New Hugo Site</title>
-    <link>./categories/</link>
-    <description>Recent content in Categories on My New Hugo Site</description>
+    <title>Categories on Juliaで数理最適化</title>
+    <link>https://pallahaxi.github.io/calender_deriven_development/categories/</link>
+    <description>Recent content in Categories on Juliaで数理最適化</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>ja-jp</language>
-    <lastBuildDate>Wed, 02 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="./categories/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Development</title>
-      <link>./categories/development/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>./categories/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>golang</title>
-      <link>./categories/golang/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>./categories/golang/</guid>
-      <description></description>
-    </item>
-    
+    <language>ja-jp</language><atom:link href="https://pallahaxi.github.io/calender_deriven_development/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
