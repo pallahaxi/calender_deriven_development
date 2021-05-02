@@ -1,6 +1,6 @@
 baseURL = "https://pallahaxi.github.io/calender_deriven_development/"
 languageCode = "ja-jp"
-title = "My New Hugo Site"
+title = "Juliaで数理最適化"
 theme = "book"
 publishDir = "docs"
 canonifyurls = true

@@ -1,6 +1,6 @@
 {
-  "name": "My New Hugo Site",
-  "short_name": "My New Hugo Site",
+  "name": "Juliaで数理最適化",
+  "short_name": "Juliaで数理最適化",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

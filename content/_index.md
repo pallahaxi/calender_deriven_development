@@ -3,7 +3,7 @@ title: Juliaで数理最適化
 type: docs
 ---
 
-# Juliaで数理最適化
+# Juliaで数理最適化コンテンツ
 
 ## [Juliaで数理最適化100問]({{< ref "/docs/opt_100/_index.md" >}})
 Juliaで数理最適化100問を再構成したページ
