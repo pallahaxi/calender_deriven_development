@@ -20,3 +20,15 @@ https://gohugo.io/content-management/shortcodes/
 ```
 特にpathの指定に注意。
 一旦、各ページと同じ名前でディレクトリを `static` 下に切って画像を置くルールとする。
+
+## tex
+inlineのtexは
+```hugo
+もがもが{{< katex >}}\pi(x){{< /katex >}}もがもが
+```
+で、通常の数式(フーリエ変換)は
+```hugo
+{{< katex display >}}
+f(x) = \int_{-\infty}^\infty\hat f(\xi),e^{2 \pi i \xi x},d\xi
+{{< /katex >}}
+```
