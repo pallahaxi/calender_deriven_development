@@ -1,7 +1,7 @@
 ---
-title: "グラフの最短経路問題"
+title: "最短路の列挙"
 date: 2021-05-02T18:00:30+09:00
-summary: "`Lightgraph.jl` の使い方"
+summary: "第k最短路と `LightGraph.jl` による無向グラフの列挙と多目的最短路"
 draft: false
 weight: 1
 # bookFlatSection: false
@@ -11,28 +11,32 @@ weight: 1
 # bookComments: true
 ---
 
-# グラフの最短経路を探すお
+# 最短経路の列挙
 
-```julia:opt_graph.jl
-using LightGraphs, SimpleWeightedGraphs, GraphPlot, Cairo, GraphRecipes, Compose, Colors
+```julia
+using Cairo
+using Colors
+using Compose
+using GraphPlot
+using GraphRecipes
+using LightGraphs
+using SimpleWeightedGraphs
+```
 
+## 第k最短路
+`LightGraphs.jl` にYenの第 $k$ 最短路のアルゴリズムが含まれている。これは、最短路を短い（費用の小さい）順に列挙してくれる。
 
-function ordered_edges(graph::LightGraphs.AbstractGraph)
-    edge_dict = Dict{Tuple{Int,Real}, Any}()
-    for e in edges(graph)
-        edge_dict[(src(e), dst(e))] = e
-    end
-    return values(sort(edge_dict))
-end
+Jin Y. Yen, “Finding the K Shortest Loopless Paths in a Network”, Management Science, Vol. 17, No. 11, Theory Series (Jul., 1971), pp. 712-716.
 
-
+まずは2次元格子状のネットワークを構築する。
+```julia
 function generate_grid(node_num_array::Union{Tuple{Int,Real},Array{Int,1}},
                        random_range::Union{UnitRange{<:Real}, Array{<:Real,1}}=1:10,
                        plot_flag::Bool=false,
                        file_name::String="grid.png")
     @assert length(node_num_array) == 2
 
-    grid_graph = grid(node_num_array) # gridでエッジを構築
+    grid_graph = grid(node_num_array) # gridで格子状のエッジを構築
     g = SimpleWeightedGraph(nv(grid_graph)) # 重み付きエッジのグラフをgrid_graphのノードの個数構築
     edge_weight = rand(random_range, grid_graph.ne) # 予め乱数でエッジの重みを作成
     for (num, e) in enumerate(edges(grid_graph))
@@ -45,44 +49,112 @@ function generate_grid(node_num_array::Union{Tuple{Int,Real},Array{Int,1}},
     if plot_flag
         draw(
             PNG(file_name, 10cm, 10cm),
-            gplot(SimpleGraph(g), # weightgraphは直接gplotに渡せない
+            gplot(SimpleGraph(g), # weightgraphは直接gplotに渡せないためSimpleGraph型にキャストする
                   locs_x, locs_y,
                   nodelabel=1:nv(g),
-                  # collect(edges(g))の順序とplotの順序は対応していないので注意
-                  # edgeのlabel orderはlexicographic orderingに従うhttps://github.com/JuliaGraphs/GraphPlot.jl/issues/70
                   edgelabel=[e.weight for e in ordered_edges(g)])
         )
     end
     return g
 end
 
+# edgeの並びを整理する関数
+function ordered_edges(graph::LightGraphs.AbstractGraph)
+    edge_dict = Dict{Tuple{Int,Real}, Any}()
+    for e in edges(graph)
+        edge_dict[(src(e), dst(e))] = e
+    end
+    return values(sort(edge_dict))
+end
+
+const node_num_array = [5, 5]
+
+const g = generate_grid(node_num_array, 1:10, true);
+```
+{{< figure src="/docs/opt_100/static/short_path_enum/grid.png" title="" class="center" >}}
+
+
+ここで `LightGraph.jl` が用意している `edges` 関数が返す順序とグラフ可視化のための `gplot` 関数の `edgelabel` に渡す順序が一致しないことに注意する。
+`edgelabel` ではlexicographic orderingに従う (https://github.com/JuliaGraphs/GraphPlot.jl/issues/70)。
+そのため、ここではラベルの順序を一時的に整理する `orderd_edges` 関数を用意した。
+
+Yenのアルゴリズムは下記のように呼び出す。
+```julia
+yen_k_shortest_paths(g, 1, 25)
+```
+出力としては
+```julia
+LightGraphs.YenState{Float64, Int64}([33.0], [[1, 2, 7, 12, 17, 18, 19, 20, 25]])
+```
+と、最短ルートを1つ出力します。第k最短経路を出力するには
+```julia
+k = 5;
+yen_state = yen_k_shortest_paths(g, 1, 25, weights(g), k);
+for (p, d) in zip(yen_state.paths, yen_state.dists)
+    println("path: $p, dists: $d")
+end
+```
+のように実行する。しかし、現在のところ何点か `yen_k_shortest_paths` 関数にはバグが存在する。実際、上記の実行結果では同じエッジがk回出力されてしまう。
+```julia
+path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
+path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
+path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
+path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
+path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
+```
+これは `LightGraphs.jl` のサブモジュールである `SimpleWeightedGraphs.jl` の `rem_edge!` のバグ([リンク](https://github.com/JuliaGraphs/SimpleWeightedGraphs.jl/issues/66))に起因する。  
+他にも同じ費用の経路がある場合、出力されないバグ([リンク](https://github.com/JuliaGraphs/LightGraphs.jl/issues/1505))などもあるようである。これは `yen_k_shortest_paths` 関数の[ソースコード](https://github.com/JuliaGraphs/LightGraphs.jl/blob/2a644c2b15b444e7f32f73021ec276aa9fc8ba30/src/shortestpaths/yen.jl)で使われている `dijkstra_shortest_paths` 関数で `allpaths=true` にせずエッジを全列挙し `.predecessors` から同じ重みのエッジを探索していない実装であることに起因する。  
+今回、上記で例示した同じ経路がk回出力されてしまう問題だけに対応するため、以下のように実行する。
+```julia
+k = 5;
+yen_state = yen_k_shortest_paths(SimpleGraph(g), 1, 25, weights(g), k);
+for (p, d) in zip(yen_state.paths, yen_state.dists)
+    println("path: $p, dists: $d")
+end
+```
+下記の出力が得られる。
+```julia
+path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
+path: [1, 2, 3, 4, 9, 14, 19, 20, 25], dists: 35.0
+path: [1, 2, 7, 12, 13, 18, 19, 20, 25], dists: 35.0
+path: [1, 2, 7, 12, 17, 18, 23, 24, 25], dists: 36.0
+path: [1, 2, 7, 12, 17, 18, 19, 24, 25], dists: 37.0
+```
+可視化と最短経路を同時に得るため、下記の関数を定義する。
+```julia
 function grid_yen_shortest_path(graph::LightGraphs.AbstractGraph,
                                 node_num_array::Union{Tuple{Int,Real},Array{Int,1}},
                                 source::Int,
-                                target::Int,
+                                target::Int;
+                                k_path::Int=1,
                                 plot_flag::Bool=false,
                                 file_name::String="grid_shortest_path.png")
     @assert length(node_num_array) == 2
 
-    shortest_path = yen_k_shortest_paths(graph, source, target)
-    dists = shortest_path.dists[1];  # 複数ある可能性があるが、一旦1番目のものだけ
-    paths = shortest_path.paths[1];  # 複数ある可能性があるが、一旦1番目のものだけ
+    shortest_path = yen_k_shortest_paths(SimpleGraph(graph), source, target,
+                                         weights(graph), k_path)
+    dists = shortest_path.dists;
+    paths = shortest_path.paths;
+    @assert length(paths) >= k_path
+
     locs_x = Array{Float64, 1}(
         vcat([i for i in 1:node_num_array[1], j in 1:node_num_array[2]]...))
     locs_y = Array{Float64, 1}(
         vcat([j for i in 1:node_num_array[1], j in 1:node_num_array[2]]...))
     colors = [colorant"lightgray" for i in 1:ne(graph)];
-    node_piar = Vector{Tuple}(undef, length(paths) - 1);
-    for (num, (i, j)) in enumerate(zip(paths[begin:end-1], paths[begin+1:end]))
+    node_piar = Vector{Tuple}(undef, length(paths[k_path]) - 1);
+    for (num, (i, j)) in enumerate(zip(paths[k_path][begin:end-1],
+                                       paths[k_path][begin+1:end]))
         node_piar[num] = (i, j)
     end
 
-    for (num, e) in enumerate(ordered_edges(graph))
-        if (src(e), dst(e)) in node_piar
-            colors[num] = colorant"orange"
-        end
-    end
     if plot_flag
+        for (num, e) in enumerate(ordered_edges(graph))
+            if (src(e), dst(e)) in node_piar
+                colors[num] = colorant"orange"
+            end
+        end
+
         draw(
             PNG(file_name, 10cm, 10cm),
             gplot(SimpleGraph(graph), locs_x, locs_y,
@@ -91,14 +163,26 @@ function grid_yen_shortest_path(graph::LightGraphs.AbstractGraph,
                   edgelabel=[e.weight for e in ordered_edges(graph)])
         )
     end
+    return dists, paths
 end
+```
+```julia
+d, p = grid_yen_shortest_path(g, node_num_array, 1, nv(g), k_path=1, plot_flag=true)
+```
+{{< figure src="/docs/opt_100/static/short_path_enum/grid_shortest_path.png" title="" class="center" >}}
+
+この際の距離 `d` は `33.0` であった。さらに、第2最短経路の場合には下記のように実行する。
+```julia
+d, p = grid_yen_shortest_path(g, node_num_array, 1, nv(g), k_path=2, plot_flag=true, file_name="grid_shortest_path_second.png")
+```
+{{< figure src="/docs/opt_100/static/short_path_enum/grid_shortest_path_second.png" title="" class="center" >}}
+
+この際の距離 `d[end]` は `35.0` であった。
 
 
-const node_num_array = [7, 7]
+## 無向パス（閉路，森など）の列挙
 
-g = generate_grid(node_num_array, 1:10, true);
-grid_yen_shortest_path(g, node_num_array, 1, nv(g), true)
-
+```julia
 """
 最短経路を探索する関数はあるものの、下記に対応する全pathを列挙する関数はなさそう?
 GraphSet.set_universe(G.edges())
