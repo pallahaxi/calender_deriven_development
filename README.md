@@ -21,7 +21,7 @@ https://gohugo.io/content-management/shortcodes/
 特にpathの指定に注意。
 一旦、各ページと同じ名前でディレクトリを `static` 下に切って画像を置くルールとする。
 
-## tex
+## texのshortcode
 inlineのtexは
 ```hugo
 もがもが{{< katex >}}\pi(x){{< /katex >}}もがもが
