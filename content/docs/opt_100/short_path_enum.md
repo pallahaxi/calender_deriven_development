@@ -366,7 +366,7 @@ cycle_plot(G, 1, 4, locs_x, locs_y)
 {{< figure src="/docs/opt_100/static/short_path_enum/cycle_plot.png" title="" class="center" >}}
 
 ## Hamilton閉路
-ない
+現在のところHamilton閉路を見つけるパッケージは作られていない。
 
 # 多目的最短路問題
 費用と時間の2つの重みをもつグラフに対して、意思決定者にとって便利な複数のパスを示す問題を考える。 これは、多目的最適化問題になる。
@@ -452,3 +452,82 @@ savefig(plot(x, y, line=(3, 0.6, :green), marker=(:circle, 5, 0.8, Plots.stroke(
         "efficient_frontier.png")
 ```
 {{< figure src="/docs/opt_100/static/short_path_enum/efficient_frontier.png" title="" >}}
+
+時間を測定するため関数化する。
+```julia
+using BenchmarkTools
+
+function ef(input_graph::MetaGraph)
+    x, y = Vector{Int}(), Vector{Float64}()
+    for k in 0:99
+        α = 0.01 * k
+        for e in edges(input_graph)
+            set_prop!(input_graph, e, :weight,
+                      α * get_prop(input_graph, e, :cost) + (1 - α) * get_prop(input_graph, e, :time))
+        end
+        dijk = dijkstra_shortest_paths(input_graph, 1, weights(input_graph))
+        cost::Int = 0
+        time::Float64 = 0.0
+        j = 1
+        for i in enumerate_paths(dijk, m * n)[begin+1:end]
+            cost += get_prop(input_graph, Edge(j, i), :cost)
+            time += get_prop(input_graph, Edge(j, i), :time)
+            j = i
+        end
+        push!(x, cost)
+        push!(y, time)
+    end
+    return x, y
+end
+
+@benchmark ef(mg)
+```
+計測結果は
+```bash
+BenchmarkTools.Trial: 
+  memory estimate:  3.69 GiB
+  allocs estimate:  37869799
+  --------------
+  minimum time:     4.847 s (12.67% GC)
+  median time:      4.921 s (13.22% GC)
+  mean time:        4.921 s (13.22% GC)
+  maximum time:     4.994 s (13.76% GC)
+  --------------
+  samples:          2
+  evals/sample:     1
+```
+
+pythonでの時間の測定コードは下記となる。
+```python
+from time import time as t
+
+start = t()
+x, y =[],[]
+for k in range(100):
+    alpha = 0.01* k
+    for (i,j) in G.edges():
+        G[i][j]["weight"] = alpha*G[i][j]["cost"]+ (1-alpha)*G[i][j]["time"]
+
+    pred, distance = nx.dijkstra_predecessor_and_distance(G, source=(0,0))
+    #print("minimum cost=", distance[m-1,n-1])
+    j = (m-1,n-1)
+    cost = time = 0
+    while i != (0,0):
+        i = pred[j][0]
+        cost += G[i][j]["cost"]
+        time += G[i][j]["time"]
+        j = i
+    #print(cost,time)
+    x.append(cost)
+    y.append(time)
+process_time = t() - start
+print(process_time)
+```
+測定結果は
+```bash
+28.481345653533936
+```
+となった。およそ5倍と非常にJuliaのdijkstraアルゴリズムが高速であることがわかった。
+
+## すべての単純パスを列挙するアルゴリズム
+[上記]({{< ref "/docs/opt_100/short_path_enum.md#無向パス（閉路，森など）の列挙" >}})にもあるように、現在のところ `LightGraphs.jl` では `all_simple_paths` に対応する関数のプルリクが挙がっている。
