@@ -20,11 +20,12 @@ using Compose
 using GraphPlot
 using GraphRecipes
 using LightGraphs
+using MetaGraphs
 using SimpleWeightedGraphs
 ```
 
 ## 第k最短路
-`LightGraphs.jl` にYenの第 $k$ 最短路のアルゴリズムが含まれている。これは、最短路を短い（費用の小さい）順に列挙してくれる。
+`LightGraphs.jl` にYenの第 {{< katex >}}k{{< /katex >}} 最短路のアルゴリズムが含まれている。これは、最短路を短い（費用の小さい）順に列挙してくれる。
 
 Jin Y. Yen, “Finding the K Shortest Loopless Paths in a Network”, Management Science, Vol. 17, No. 11, Theory Series (Jul., 1971), pp. 712-716.
 
@@ -86,7 +87,7 @@ yen_k_shortest_paths(g, 1, 25)
 ```julia
 LightGraphs.YenState{Float64, Int64}([33.0], [[1, 2, 7, 12, 17, 18, 19, 20, 25]])
 ```
-と、最短ルートを1つ出力します。第k最短経路を出力するには
+と、最短ルートを1つ出力します。第{{< katex >}}k{{< /katex >}}最短経路を出力するには
 ```julia
 k = 5;
 yen_state = yen_k_shortest_paths(g, 1, 25, weights(g), k);
@@ -102,9 +103,8 @@ path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
 path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
 path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
 ```
-これは `LightGraphs.jl` のサブモジュールである `SimpleWeightedGraphs.jl` の `rem_edge!` のバグ([リンク](https://github.com/JuliaGraphs/SimpleWeightedGraphs.jl/issues/66))に起因する。  
-他にも同じ費用の経路がある場合、出力されないバグ([リンク](https://github.com/JuliaGraphs/LightGraphs.jl/issues/1505))などもあるようである。これは `yen_k_shortest_paths` 関数の[ソースコード](https://github.com/JuliaGraphs/LightGraphs.jl/blob/2a644c2b15b444e7f32f73021ec276aa9fc8ba30/src/shortestpaths/yen.jl)で使われている `dijkstra_shortest_paths` 関数で `allpaths=true` にせずエッジを全列挙し `.predecessors` から同じ重みのエッジを探索していない実装であることに起因する。  
-今回、上記で例示した同じ経路がk回出力されてしまう問題だけに対応するため、以下のように実行する。
+同様のバグ([リンク](https://github.com/JuliaGraphs/LightGraphs.jl/issues/1505))が報告されている。同じ費用の経路がある場合に2度同じ経路が出力されてしまうというバグである。これらは `LightGraphs.jl` のサブモジュールである `SimpleWeightedGraphs.jl` の `rem_edge!` のバグ([リンク](https://github.com/JuliaGraphs/SimpleWeightedGraphs.jl/issues/66))に起因する。  
+今回の原因となっている `SimpleWeightedgraphs` を避けて対応すれば良いので、以下のように実行する。
 ```julia
 k = 5;
 yen_state = yen_k_shortest_paths(SimpleGraph(g), 1, 25, weights(g), k);
@@ -112,7 +112,7 @@ for (p, d) in zip(yen_state.paths, yen_state.dists)
     println("path: $p, dists: $d")
 end
 ```
-下記の出力が得られる。
+下記のように期待する出力が得られる。
 ```julia
 path: [1, 2, 7, 12, 17, 18, 19, 20, 25], dists: 33.0
 path: [1, 2, 3, 4, 9, 14, 19, 20, 25], dists: 35.0
@@ -120,9 +120,10 @@ path: [1, 2, 7, 12, 13, 18, 19, 20, 25], dists: 35.0
 path: [1, 2, 7, 12, 17, 18, 23, 24, 25], dists: 36.0
 path: [1, 2, 7, 12, 17, 18, 19, 24, 25], dists: 37.0
 ```
+同様に有効グラフの場合にも `SimpleDiGraph` でキャストして実行すれば良い。型に応じて多重ディスパッチで対応すれば `yen_k_shortest_paths` 関数のバグは修正できるはずである。
 可視化と最短経路を同時に得るため、下記の関数を定義する。
 ```julia
-function grid_yen_shortest_path(graph::LightGraphs.AbstractGraph,
+function grid_yen_shortest_path(graph::SimpleWeightedGraph,
                                 node_num_array::Union{Tuple{Int,Real},Array{Int,1}},
                                 source::Int,
                                 target::Int;
@@ -142,15 +143,15 @@ function grid_yen_shortest_path(graph::LightGraphs.AbstractGraph,
     locs_y = Array{Float64, 1}(
         vcat([j for i in 1:node_num_array[1], j in 1:node_num_array[2]]...))
     colors = [colorant"lightgray" for i in 1:ne(graph)];
-    node_piar = Vector{Tuple}(undef, length(paths[k_path]) - 1);
+    node_piar = Set{Set}()
     for (num, (i, j)) in enumerate(zip(paths[k_path][begin:end-1],
                                        paths[k_path][begin+1:end]))
-        node_piar[num] = (i, j)
+        push!(node_piar, Set([i, j]))
     end
 
     if plot_flag
         for (num, e) in enumerate(ordered_edges(graph))
-            if (src(e), dst(e)) in node_piar
+            if Set([src(e), dst(e)]) in node_piar
                 colors[num] = colorant"orange"
             end
         end
@@ -181,31 +182,13 @@ d, p = grid_yen_shortest_path(g, node_num_array, 1, nv(g), k_path=2, plot_flag=t
 
 
 ## 無向パス（閉路，森など）の列挙
-
-```julia
-"""
-最短経路を探索する関数はあるものの、下記に対応する全pathを列挙する関数はなさそう?
-GraphSet.set_universe(G.edges())
-paths = GraphSet.paths(terminal1=(0,0), terminal2=(n-1,n-1))
-len(paths) #パスの総数
-
-count =0
-for p in paths.min_iter(weight):
-    count+=1
-    if count>=10:
-        break
-    print(p)
-
-plt.figure()
-nx.draw(G, pos=pos,with_labels=False, node_size=100)
-nx.draw(G, pos=pos,with_labels=False, node_size=100,
-        edgelist=p,edge_color="red",width=10,alpha=0.3)
-nx.draw_networkx_edge_labels(G,pos,edge_labels=weight)
-plt.show()
-参考
-https://juliagraphs.org/LightGraphs.jl/latest/pathing/#Path-discovery-/-enumeration
-all_simple_pathsが実装されれば対応する処理ができると思われる。
+現在のところGraphillionのようにパスの列挙をする関数は用意されていないようである。
+一方、 `networkx` の `all_simple_paths` に対応する関数のプルリクが挙がっている。  
 https://github.com/JuliaGraphs/LightGraphs.jl/pull/1540
+
+もし `all_simple_paths` が実装されれば対応する処理ができると思われる。
+```julia
+# !!実装されていない関数であり、下記の関数は動きません!!
 function all_paths_count(g::AbstractGraph, source::Int)
     c = 0
     for i in 1:nv(g)
@@ -216,10 +199,14 @@ function all_paths_count(g::AbstractGraph, source::Int)
     end
     return c / 2
 end
-的な
-最長経路も同様
-"""
+```
+同様に、最長経路に関する関数も現在のところ用意されていない。
 
+## 閉路の列挙
+閉路の列挙には `simplecycles_limited_length` 関数を用いる。
+まず閉路の列挙のため、新規でグラフを生成する。
+
+```julia
 function generate_random_complete_graph(n::Int,
                                         plot_flag::Bool=false,
                                         file_name::String="random_complete_graph.png")
@@ -258,16 +245,91 @@ end
 function distance(p₁::Point, p₂::Point)
     sqrt((p₁.x - p₂.x)^2 + (p₁.y - p₂.y)^2)
 end
+```
 
-G, locs_x, locs_y = generate_random_complete_graph(10, true)
+```julia
+G, locs_x, locs_y = generate_random_complete_graph(10, true);
+```
+{{< figure src="/docs/opt_100/static/short_path_enum/random_complete_graph.png" title="" class="center" >}}
 
+
+`simplecycles_limited_length` 関数は下記のように利用する。
+```julia
+simplecycles_limited_length(G, 3)
+```
+{{< expand "出力結果" >}}
+```julia
+285-element Vector{Vector{Int64}}:
+ [1, 2]
+ [1, 2, 3]
+ [1, 2, 4]
+ [1, 2, 5]
+ [1, 2, 6]
+ [1, 2, 7]
+ [1, 2, 8]
+ [1, 2, 9]
+ [1, 2, 10]
+ [1, 3]
+ [1, 3, 2]
+ [1, 3, 4]
+ [1, 3, 5]
+ [1, 3, 6]
+ [1, 3, 7]
+ [1, 3, 8]
+ [1, 3, 9]
+ [1, 3, 10]
+ [1, 4]
+ [1, 4, 2]
+ [1, 4, 3]
+ [1, 4, 5]
+ [1, 4, 6]
+ [1, 4, 7]
+ [1, 4, 8]
+ [1, 4, 9]
+ ⋮
+ [6, 8, 7]
+ [6, 8, 9]
+ [6, 8, 10]
+ [6, 9]
+ [6, 9, 7]
+ [6, 9, 8]
+ [6, 9, 10]
+ [6, 10]
+ [6, 10, 7]
+ [6, 10, 8]
+ [6, 10, 9]
+ [7, 8]
+ [7, 8, 9]
+ [7, 8, 10]
+ [7, 9]
+ [7, 9, 8]
+ [7, 9, 10]
+ [7, 10]
+ [7, 10, 8]
+ [7, 10, 9]
+ [8, 9]
+ [8, 9, 10]
+ [8, 10]
+ [8, 10, 9]
+ [9, 10]
+```
+{{< /expand >}}
+となる。第二引数以下で閉路が形成されるパスが列挙される。今回の場合、2または3ステップの閉路が列挙された。
+完全グラフであるため、
+{{< katex display >}}
+{}_{10}C_{3} + {}_{10}C_{2} = 285
+{{< /katex >}}
+
+```julia
 function detect_cycle(g::AbstractGraph,
                       source::Int,
                       len::Int)
     [i for i in simplecycles_limited_length(g, len) if length(i) > len-1 && i[1] == source]
 end
+```
 
 
+```julia
 function cycle_plot(G::AbstractGraph,
                     source::Int,
                     len::Int,
@@ -276,15 +338,15 @@ function cycle_plot(G::AbstractGraph,
                     file_name::String="cycle_plot.png")
     paths = detect_cycle(G, source, len)
     path = paths[rand(1:length(paths))] # 1つサンプル
-    node_piar = Vector{Tuple}(undef, length(path));
+    node_piar = Set{Set}()
     for (num, (i, j)) in enumerate(zip(path[begin:end-1], path[begin+1:end]))
-        node_piar[num] = Tuple(sort([i, j]))
+        push!(node_piar, Set([i, j]))
     end
     node_piar[end] = (path[begin], path[end])
 
-    colors = [colorant"lightgray" for i in 1:ne(G)];
+    colors = [colorant"lightgray" for i in 1:ne(G)]
     for (num, e) in enumerate(ordered_edges(G))
-        if (src(e), dst(e)) in node_piar
+        if Set([src(e), dst(e)]) in node_piar
             colors[num] = colorant"orange"
         end
     end
@@ -296,10 +358,97 @@ function cycle_plot(G::AbstractGraph,
               nodelabel=1:nv(G))
     )
 end
-
-cycle_plot(G, 1, 4, locs_x, locs_y)
-
-"""
-Hamilton閉路もないっす。
-"""
 ```
+
+```julia
+cycle_plot(G, 1, 4, locs_x, locs_y)
+```
+{{< figure src="/docs/opt_100/static/short_path_enum/cycle_plot.png" title="" class="center" >}}
+
+## Hamilton閉路
+ない
+
+# 多目的最短路問題
+費用と時間の2つの重みをもつグラフに対して、意思決定者にとって便利な複数のパスを示す問題を考える。 これは、多目的最適化問題になる。
+
+まず、多目的最適化の基礎と用語について述べる。
+
+以下に定義される {{< katex >}}m{{< /katex >}} 個の目的をもつ多目的最適化問題を対象とする。
+
+解の集合 {{< katex >}}X{{< /katex >}} ならびに {{< katex >}}X{{< /katex >}} から {{< katex >}}m{{< /katex >}} 次元の実数ベクトル全体への写像 {{< katex >}}f: X \rightarrow \mathbf{R}^m{{< /katex >}}が与えられている。
+ベクトル {{< katex >}}f{{< /katex >}} を目的関数ベクトルとよび、その第 {{< katex >}}i{{< /katex >}} 要素を {{< katex >}}f_i{{< /katex >}} と書く。
+ここでは、ベクトル {{< katex >}}f{{< /katex >}} を「何らかの意味」で最小にする解（の集合）を求めることを目的とする。
+
+2つの目的関数ベクトル {{< katex >}}f,g\in \mathbf{R}^m{{< /katex >}} に対して、 {{< katex >}}f{{< /katex >}} と {{< katex >}}g{{< /katex >}} が同じでなく、かつベクトルのすべての要素に対して {{< katex >}}f{{< /katex >}} の要素が {{< katex >}}g{{< /katex >}} の要素以下であるとき、ベクトル {{< katex >}}f{{< /katex >}} がベクトル {{< katex >}}g{{< /katex >}} に優越しているとよび、 {{< katex >}}f \prec g{{< /katex >}} と記す。
+
+すなわち、順序 {{< katex >}}\prec{{< /katex >}} を以下のように定義する。
+{{< katex display >}}
+f \prec g \Leftrightarrow f \neq g, f_i \leq g_i \ \ \ \forall i
+{{< /katex >}}
+たとえば、2つのベクトル {{< katex >}}f=(2,5,4)f=(2,5,4){{< /katex >}} と {{< katex >}}g=(2,6,8)g=(2,6,8){{< /katex >}} に対しては、第1要素は同じであるが、第2,3要素に対しては {{< katex >}}g{{< /katex >}} の方が大きいので {{< katex >}}f \prec g{{< /katex >}} である。
+
+2つの解 {{< katex >}}x,y{{< /katex >}} に対して、{{< katex >}}f(x) \prec f(y){{< /katex >}} のとき、解 {{< katex >}}x{{< /katex >}} は解 {{< katex >}}y{{< /katex >}} に優越していると呼ぶ。
+以下の条件を満たすとき、 {{< katex >}}x{{< /katex >}} は **非劣解** (nondominated solution) もしくは **Pareto最適解** (Pareto optimal solution)と呼ばれる。
+{{< katex display >}}
+f(y) \prec f(x) を満たす解 y \in X は存在しない
+{{< /katex >}}
+多目的最適化問題の目的は、すべての非劣解(Pareto最適解)の集合を求めることである。
+非劣解の集合から構成される境界は、 金融工学における株の構成比を決める問題（ポートフォリオ理論）では有効フロンティア(efficient frontier)と呼ばれる。
+ポートフォリオ理論のように目的関数が凸関数である場合には、有効フロンティアは凸関数になるが、一般には非劣解を繋いだものは凸になるとは限らない。
+
+非劣解の総数は非常に大きくなる可能性がある。 そのため、実際にはすべての非劣解を列挙するのではなく、 意思決定者の好みにあった少数の非劣解を選択して示すことが重要になる。
+
+最も単純なスカラー化は複数の目的関数を適当な比率を乗じて 足し合わせることである。
+
+{{< katex >}}m{{< /katex >}} 次元の目的関数ベクトルは、 {{< katex >}}m{{< /katex >}} 次元ベクトル {{< katex >}}\alpha{{< /katex >}} を用いてスカラー化できる。
+通常、パラメータ {{< katex >}}\alpha{{< /katex >}} は
+{{< katex display >}}
+\sum_{i=1}^m \alpha_i =1
+{{< /katex >}}
+を満たすように正規化しておく。
+
+この {{< katex >}}\alpha{{< /katex >}} を用いて重み付きの和をとることにより、 以下のような単一の（スカラー化された）目的関数 {{< katex >}}f_{\alpha}{{< /katex >}} に変換できる。
+{{< katex display >}}
+f_{\alpha}(x)= \sum_{i=1}^m \alpha_i f_i(x)
+{{< /katex >}}
+これを2目的の最短路問題に適用してみよう。格子グラフの枝に２つの重み（costとtime）を定義して、スカラー化を用いて、有効フロンティアを描画する。
+
+
+まずは元サイトと同様のプロセスで格子状のグラフを作成する。各エッジに `:cost` と `:time` の属性を付与する。
+```julia
+const m, n = 100, 100;
+const lb, ub = 1, 100;
+mg = MetaGraph(grid([m, n]));
+for e in edges(mg)
+    set_prop!(mg, e, :cost, rand(lb:ub))
+    set_prop!(mg, e, :time, 100/get_prop(mg, e, :cost))
+end
+```
+
+最短経路を解くようにする
+```julia
+x, y = Vector{Int}(), Vector{Float64}()
+for k in 0:99
+    α = 0.01 * k
+    for e in edges(mg)
+        set_prop!(mg, e, :weight,
+                  α * get_prop(mg, e, :cost) + (1 - α) * get_prop(mg, e, :time))
+    end
+    dijk = dijkstra_shortest_paths(mg, 1, weights(mg))
+    cost, time = 0, 0.0
+    j = 1
+    for i in enumerate_paths(dijk, m * n)[begin+1:end]
+        cost += get_prop(mg, Edge(j, i), :cost)
+        time += get_prop(mg, Edge(j, i), :time)
+        j = i
+    end
+    push!(x, cost)
+    push!(y, time)
+end
+```
+可視化
+```julia
+savefig(plot(x, y, line=(3, 0.6, :green), marker=(:circle, 5, 0.8, Plots.stroke(0), :green), legend=false),
+        "efficient_frontier.png")
+```
+{{< figure src="/docs/opt_100/static/short_path_enum/efficient_frontier.png" title="" >}}

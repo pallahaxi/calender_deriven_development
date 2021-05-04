@@ -14,6 +14,13 @@ https://themes.gohugo.io//theme/hugo-book/
 https://gohugo.io/content-management/shortcodes/
 
 # tips
+## 新規ページ作成
+```bash
+hugo new docs/opt_100/mogamoga.md
+```
+上記で `content/docs/opt_100/mogamoga.md` が作成される。これを編集する。
+
+
 ## 画像の貼り付けshortcode
 ```hugo
 {{< figure src="/docs/opt_100/static/short_path_enum/grid.png" title="" >}}
