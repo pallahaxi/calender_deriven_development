@@ -317,8 +317,15 @@ simplecycles_limited_length(G, 3)
 となる。第二引数以下で閉路が形成されるパスが列挙される。今回の場合、2または3ステップの閉路が列挙された。
 完全グラフであるため、
 {{< katex display >}}
-{}_{10}C_{3} + {}_{10}C_{2} = 285
+{}_{10}C_{2} + \sum_{k=1}^8 {}_{10-k}P_2
+= \frac{10\cdot 9}{2\cdot 1} + \sum_{k=1}^8 k (k+1)\\
+= 45 + \sum_{k=1}^8 k^2 + \sum_{k=1}^8 k\\
+= 45 + \frac{1}{6} n(n+1)(2n + 1)|_{n=8} + \frac{1}{2} n (n+1)|_{n=8}\\
+= 285
 {{< /katex >}}
+であり、上記の出力数と一致している。
+
+`simplecycles_limited_length` を用いて閉路を検出する関数を用意する。
 
 ```julia
 function detect_cycle(g::AbstractGraph,
@@ -328,6 +335,7 @@ function detect_cycle(g::AbstractGraph,
 end
 ```
 
+閉路を検出し、同時に可視化もまとめた関数を下記のように用意した。
 
 ```julia
 function cycle_plot(G::AbstractGraph,
@@ -359,6 +367,8 @@ function cycle_plot(G::AbstractGraph,
     )
 end
 ```
+
+実行結果は下記の通りである。
 
 ```julia
 cycle_plot(G, 1, 4, locs_x, locs_y)
