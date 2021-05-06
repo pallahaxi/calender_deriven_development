@@ -72,7 +72,7 @@ const node_num_array = [5, 5]
 
 const g = generate_grid(node_num_array, 1:10, true);
 ```
-{{< figure src="/docs/opt_100/static/short_path_enum/grid.png" title="" class="center" >}}
+{{< figure src="/docs/opt_100/static/k_shortest_paths/grid.png" title="" class="center" >}}
 
 
 ここで `LightGraph.jl` が用意している `edges` 関数が返す順序とグラフ可視化のための `gplot` 関数の `edgelabel` に渡す順序が一致しないことに注意する。
@@ -170,13 +170,13 @@ end
 ```julia
 d, p = grid_yen_shortest_path(g, node_num_array, 1, nv(g), k_path=1, plot_flag=true)
 ```
-{{< figure src="/docs/opt_100/static/short_path_enum/grid_shortest_path.png" title="" class="center" >}}
+{{< figure src="/docs/opt_100/static/k_shortest_paths/grid_shortest_path.png" title="" class="center" >}}
 
 この際の距離 `d` は `33.0` であった。さらに、第2最短経路の場合には下記のように実行する。
 ```julia
 d, p = grid_yen_shortest_path(g, node_num_array, 1, nv(g), k_path=2, plot_flag=true, file_name="grid_shortest_path_second.png")
 ```
-{{< figure src="/docs/opt_100/static/short_path_enum/grid_shortest_path_second.png" title="" class="center" >}}
+{{< figure src="/docs/opt_100/static/k_shortest_paths/grid_shortest_path_second.png" title="" class="center" >}}
 
 この際の距離 `d[end]` は `35.0` であった。
 
@@ -250,7 +250,7 @@ end
 ```julia
 G, locs_x, locs_y = generate_random_complete_graph(10, true);
 ```
-{{< figure src="/docs/opt_100/static/short_path_enum/random_complete_graph.png" title="" class="center" >}}
+{{< figure src="/docs/opt_100/static/k_shortest_paths/random_complete_graph.png" title="" class="center" >}}
 
 
 `simplecycles_limited_length` 関数は下記のように利用する。
@@ -373,7 +373,7 @@ end
 ```julia
 cycle_plot(G, 1, 4, locs_x, locs_y)
 ```
-{{< figure src="/docs/opt_100/static/short_path_enum/cycle_plot.png" title="" class="center" >}}
+{{< figure src="/docs/opt_100/static/k_shortest_paths/cycle_plot.png" title="" class="center" >}}
 
 ## Hamilton閉路
 現在のところHamilton閉路を見つけるパッケージは作られていない。
@@ -461,7 +461,7 @@ end
 savefig(plot(x, y, line=(3, 0.6, :green), marker=(:circle, 5, 0.8, Plots.stroke(0), :green), legend=false),
         "efficient_frontier.png")
 ```
-{{< figure src="/docs/opt_100/static/short_path_enum/efficient_frontier.png" title="" >}}
+{{< figure src="/docs/opt_100/static/k_shortest_paths/efficient_frontier.png" title="" >}}
 
 時間を測定するため関数化する。
 ```julia
@@ -540,4 +540,4 @@ print(process_time)
 となった。およそ5倍と非常にJuliaのdijkstraアルゴリズムが高速であることがわかった。
 
 ## すべての単純パスを列挙するアルゴリズム
-[上記]({{< ref "/docs/opt_100/short_path_enum.md#無向パス（閉路，森など）の列挙" >}})にもあるように、現在のところ `LightGraphs.jl` では `all_simple_paths` に対応する関数のプルリクが挙がっている。
+[上記]({{< ref "/docs/opt_100/k_shortest_paths.md#無向パス閉路森などの列挙" >}})にもあるように、現在のところ `LightGraphs.jl` では `all_simple_paths` に対応する関数のプルリクが挙がっている。

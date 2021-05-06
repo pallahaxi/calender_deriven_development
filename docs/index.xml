@@ -7,20 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language><atom:link href="https://pallahaxi.github.io/calender_deriven_development/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>最大流問題</title>
-      <link>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/maxflow/</link>
-      <pubDate>Tue, 04 May 2021 15:24:56 +0900</pubDate>
-      
-      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/maxflow/</guid>
-      <description>最大流問題に対する定式化とアルゴリズム</description>
-    </item>
-    
-    <item>
       <title>最短路の列挙</title>
-      <link>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/short_path_enum/</link>
+      <link>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/</link>
       <pubDate>Sun, 02 May 2021 18:00:30 +0900</pubDate>
       
-      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/short_path_enum/</guid>
+      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/</guid>
       <description>第k最短路と &lt;code&gt;LightGraph.jl&lt;/code&gt; による無向グラフの列挙と多目的最短路</description>
     </item>
     
@@ -31,15 +22,6 @@
       
       <guid>https://pallahaxi.github.io/calender_deriven_development/docs/jump/mogamoga/</guid>
       <description>test</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/</guid>
-      <description></description>
     </item>
     
   </channel>

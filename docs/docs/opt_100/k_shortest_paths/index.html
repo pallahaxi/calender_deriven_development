@@ -9,15 +9,15 @@
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="最短路の列挙" />
 <meta property="og:description" content="第k最短路と LightGraph.jl による無向グラフの列挙と多目的最短路" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/short_path_enum/" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/" /><meta property="article:section" content="docs" />
 <meta property="article:published_time" content="2021-05-02T18:00:30&#43;09:00" />
-<meta property="article:modified_time" content="2021-05-04T15:10:38&#43;09:00" />
+<meta property="article:modified_time" content="2021-05-02T18:00:30&#43;09:00" />
 
 <title>最短路の列挙 | Juliaで数理最適化</title>
 <link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
 <link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css">
-<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.f1471f3c23dd82604ea5dfe49ae9e27ec9ef251b6f332f735013d6d7e80b676c.js"></script>
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.5e74f0cde76818c5bc185f431b9f579aaab93353be08582bde3954923e2360e7.js"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -87,25 +87,10 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/maxflow/" class="">最大流問題</a>
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/" class=" active">最短路の列挙</a>
   
 
         </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/short_path_enum/" class=" active">最短路の列挙</a>
-  
-
-        </li>
-      
-    
       
     
   </ul>
@@ -299,7 +284,7 @@ https://github.com/alex-shpak/hugo-book
 
 <span style="color:#66d9ef">const</span> g <span style="color:#f92672">=</span> generate_grid(node_num_array, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>, <span style="color:#66d9ef">true</span>);
 </code></pre></div><figure class="center">
-    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/short_path_enum/grid.png"/> 
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid.png"/> 
 </figure>
 
 <p>ここで <code>LightGraph.jl</code> が用意している <code>edges</code> 関数が返す順序とグラフ可視化のための <code>gplot</code> 関数の <code>edgelabel</code> に渡す順序が一致しないことに注意する。
@@ -384,13 +369,13 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 <span style="color:#66d9ef">end</span>
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">d, p <span style="color:#f92672">=</span> grid_yen_shortest_path(g, node_num_array, <span style="color:#ae81ff">1</span>, nv(g), k_path<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, plot_flag<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>)
 </code></pre></div><figure class="center">
-    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/short_path_enum/grid_shortest_path.png"/> 
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid_shortest_path.png"/> 
 </figure>
 
 <p>この際の距離 <code>d</code> は <code>33.0</code> であった。さらに、第2最短経路の場合には下記のように実行する。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">d, p <span style="color:#f92672">=</span> grid_yen_shortest_path(g, node_num_array, <span style="color:#ae81ff">1</span>, nv(g), k_path<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, plot_flag<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>, file_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid_shortest_path_second.png&#34;</span>)
 </code></pre></div><figure class="center">
-    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/short_path_enum/grid_shortest_path_second.png"/> 
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid_shortest_path_second.png"/> 
 </figure>
 
 <p>この際の距離 <code>d[end]</code> は <code>35.0</code> であった。</p>
@@ -460,7 +445,7 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 <span style="color:#66d9ef">end</span>
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">G, locs_x, locs_y <span style="color:#f92672">=</span> generate_random_complete_graph(<span style="color:#ae81ff">10</span>, <span style="color:#66d9ef">true</span>);
 </code></pre></div><figure class="center">
-    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/short_path_enum/random_complete_graph.png"/> 
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/random_complete_graph.png"/> 
 </figure>
 
 <p><code>simplecycles_limited_length</code> 関数は下記のように利用する。</p>
@@ -581,7 +566,7 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 </code></pre></div><p>実行結果は下記の通りである。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">cycle_plot(G, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, locs_x, locs_y)
 </code></pre></div><figure class="center">
-    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/short_path_enum/cycle_plot.png"/> 
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/cycle_plot.png"/> 
 </figure>
 
 <h2 id="hamilton閉路">
@@ -760,7 +745,7 @@ mg <span style="color:#f92672">=</span> MetaGraph(grid([m, n]));
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">savefig(plot(x, y, line<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0.6</span>, <span style="color:#f92672">:</span>green), marker<span style="color:#f92672">=</span>(<span style="color:#f92672">:</span>circle, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">0.8</span>, Plots<span style="color:#f92672">.</span>stroke(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">:</span>green), legend<span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>),
         <span style="color:#e6db74">&#34;efficient_frontier.png&#34;</span>)
 </code></pre></div><figure>
-    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/short_path_enum/efficient_frontier.png"/> 
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/efficient_frontier.png"/> 
 </figure>
 
 <p>時間を測定するため関数化する。</p>
@@ -833,7 +818,7 @@ process_time <span style="color:#f92672">=</span> t() <span style="color:#f92672
   すべての単純パスを列挙するアルゴリズム
   <a class="anchor" href="#%e3%81%99%e3%81%b9%e3%81%a6%e3%81%ae%e5%8d%98%e7%b4%94%e3%83%91%e3%82%b9%e3%82%92%e5%88%97%e6%8c%99%e3%81%99%e3%82%8b%e3%82%a2%e3%83%ab%e3%82%b4%e3%83%aa%e3%82%ba%e3%83%a0">#</a>
 </h2>
-<p><a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/short_path_enum/#無向パス（閉路，森など）の列挙">上記</a>にもあるように、現在のところ <code>LightGraphs.jl</code> では <code>all_simple_paths</code> に対応する関数のプルリクが挙がっている。</p>
+<p><a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/#無向パス閉路森などの列挙">上記</a>にもあるように、現在のところ <code>LightGraphs.jl</code> では <code>all_simple_paths</code> に対応する関数のプルリクが挙がっている。</p>
 </article>
  
       
