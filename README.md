@@ -1,20 +1,20 @@
 # ホームページ
-- [Juliaで数理最適化](https://pallahaxi.github.io/calender_deriven_development/)
+- [Juliaで数理最適化](https://pallahaxi.github.io/calender_deriven_development/)  
 - [Python言語による実務で使える100+の最適化問題](https://mikiokubo.github.io/opt100/index.html)
 
 # 参考
 ## bookテーマのgithubページ
 https://github.com/alex-shpak/hugo-book
 
-諸設定を確認したい場合にはREADMEを読む
+諸設定を確認したい場合にはREADMEを読む  
 issueを検索すると、大体のことは解決する
 
 ## bookテーマのデモサイト
 https://themes.gohugo.io//theme/hugo-book/
 
-上記の `shortcode` はドキュメント作成時、参考になる。
-各ページの `Example` をコピれば、ボタンやtexが書ける。
-また、デフォルトのhugoが用意しているshortcodeは下記リンクにある
+上記の `shortcode` はドキュメント作成時、参考になる。  
+各ページの `Example` をコピれば、ボタンやtexが書ける。  
+また、デフォルトのhugoが用意しているshortcodeは下記リンクにある  
 https://gohugo.io/content-management/shortcodes/
 
 # tips
