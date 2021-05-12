@@ -9,8 +9,7 @@ weight: 2
 # bookComments: true
 ---
 
-# `JuMP.jl` の使い方
-Juliaの数理最適化ページ以外に `JuMP.jl` のチュートリアルについても進めたい。
+# `JuMP.jl` のチュートリアル
 
 # Table of Contents
 {{<section>}}
