@@ -16,7 +16,7 @@ tags: [""]
 Originally Contributed by: Iain Dunning
 
 本チュートリアルでは非線形最適化を用いてロケット制御問題をどのように解くかを解説します。
-この「ロケット制御問題」は[COPS3](https://www.mcs.anl.gov/~more/cops/cops3.pdf)の10章にある「Goddard Rocket」としてのベンチマーク問題です。
+この「ロケット制御問題」は[COPS3](https://www.mcs.anl.gov/~more/cops/cops3.pdf)の10章にある「Goddard Rocket」として紹介されている問題と同じパラメータを利用します。
 
 本問題のゴールは「垂直に打ち上げられたロケットの最高高度を最大化」することです。
 
@@ -39,8 +39,6 @@ Originally Contributed by: Iain Dunning
 
 さらに本問題で最大化したい高度を {{< katex >}}h(t_f){{< /katex >}} とします。
 
-Each of these corresponds to a JuMP variable indexed by the time step.
-
 ### Dynamics
 ロケット制御を考える上で力学で用いる運動方程式から、下記の3方程式を得ます。
 - 上昇率: {{< katex >}}h^\prime = v{{< /katex >}}
@@ -48,9 +46,9 @@ Each of these corresponds to a JuMP variable indexed by the time step.
 - 質量の変化率: {{< katex >}}m^\prime = -\frac{T}{c}{{< /katex >}}
 
 チュートリアルでは上記について説明が少なく、不親切だと思ったので補足します。  
-今回鉛直上向きの1軸しか考えず、上昇率は単位時間あたりの鉛直上向きの移動距離を指すのでロケットの速度に他なりません。  
+今回鉛直上向きの1軸しか考えず、上昇率は鉛直上向きの単位時間あたりの移動距離を指すのでロケットの速度に他なりません。  
 加速度については高校物理で習う運動方程式 {{< katex >}}ma = F{{< /katex >}} から得られます。ロケットに作用する力は鉛直上向きにロケット自身の推進力 {{< katex >}}T{{< /katex >}} が存在し、鉛直下向きに質量と重力加速度 {{< katex >}}g(h){{< /katex >}} の積で得られる重力 {{< katex >}}mg(h){{< /katex >}} と空気抵抗 {{< katex >}}D(h, v){{< /katex >}} が存在します。つまり高校物理で習う運動方程式に合わせて記述すると {{< katex >}}m v^\prime = T - D(h, v) - mg(h){{< /katex >}} となります。ここで {{< katex >}}g(h){{< /katex >}} が高度 {{< katex >}}h{{< /katex >}} に依存するのは地球から離れるため重力加速度が小さくなるためです。また {{< katex >}}D(h, v){{< /katex >}} は速度 {{< katex >}}v{{< /katex >}} に依存するのは高校物理で習う通りで、高度 {{< katex >}}h{{< /katex >}} に依存するのは高所では空気が薄くなるためです。  
-最後の方程式では今回 {{< katex >}}c{{< /katex >}} として最適化問題を解きます。つまり質量の変化率はロケットの推進力が比例関係にあることを指しており、質量と速度が同時に変化するロケットのような系を考えると自然と得られます。  
+最後の方程式では今回 {{< katex >}}c{{< /katex >}} を定数として最適化問題を解きます。つまり質量の変化率はロケットの推進力が比例関係にあることを指しており、質量と速度が同時に変化するロケットのような系を考えると自然と得られます。  
 またここで導入した空気抵抗 {{< katex >}}D(h, v){{< /katex >}} と重力加速度 {{< katex >}}g(h){{< /katex >}} は下記の式に従います。
 {{< katex display >}}
 \begin{aligned}
@@ -61,11 +59,21 @@ g(h) &= g_0 \left( \frac{h(0)}{h} \right)^2
 
 地上での重力加速度 {{< katex >}}g_0{{< /katex >}} と高度の初期値 {{< katex >}}h(0){{< /katex >}} と {{< katex >}}D_c, h_c{{< /katex >}} は定数として扱われます。
 
+実際にコーディングに移ります。
+
 ```julia
 using JuMP
 import Ipopt
 import Plots
 ```
+
+それぞれパッケージのバージョンは
+```
+Ipopt v0.6.5
+JuMP v0.21.8
+Plots v1.14.0
+```
+を利用しています。
 
 ソルバーとしてIpoptを使用し、JuMPのモデルを作成します。
 
@@ -180,9 +188,8 @@ status = optimize!(rocket)
 ```julia
 println("Max height: ", objective_value(rocket))
 ```
-出力
-```julia
-Max height: 1.0099999899999998
+```
+Max height: 1.0128340648308016
 ```
 
 可視化
@@ -206,3 +213,4 @@ Plots.plot(
     margin = 1Plots.cm,
 )
 ```
+{{< figure src="/docs/jump/static/Rocket_Control/results.png" title="" >}}
