@@ -25,11 +25,8 @@ Originally Contributed by: Iain Dunning
 {{< figure src="https://jump.dev/JuMP.jl/stable/assets/partial_sudoku.svg" title="JuMPチュートリアルより転載" >}}
 
 正確には数独は目的関数を最適化する問題ではなく、Feasibility Problemと呼ばれる問題になります。
-Solving a Sudoku isn't an optimization problem with an objective; its actually a feasibility problem: we wish to find a feasible solution that satisfies these rules. You can think of it as an optimization problem with an objective of 0.
-
-この問題は0-1整数問題として解くことができます。
-We can model this problem using 0-1 integer programming: a problem where all the decision variables are binary. We'll use JuMP to create the model, and then we can solve it with any integer programming solver.
-
+具体的には今回の問題は全ての変数を0-1のバイナリ値として記述し、整数問題として解くことができます。
+整数問題のソルバーを用いてJuMPのモデルを構築していきましょう。
 ```julia
 using JuMP
 using GLPK
@@ -41,10 +38,10 @@ sudoku = Model(GLPK.Optimizer)
 ```
 
 本問題の変数を定義します。
-本問題では下記のようなルールのもと、バイナリの変数(0 or 1)を用意します:
-`x[i,j,k] = 1  <= 必要十分条件 => cell(i,j)が数値kを持っている`
+上記の通り、バイナリ変数(0 or 1)を用意します。
+cell(i,j)が数値kを持っているを持っているときに `x[i,j,k] = 1` をアサインするように設計します。
 ここで `i` は行を、 `j` は列を指すインデックスです。
-`JuMP` では下記のように変数を宣言します。
+このような設計を `JuMP` では下記のように作成することができます。
 ```julia
 @variable(sudoku, x[i=1:9, j=1:9, k=1:9], Bin)
 ```
