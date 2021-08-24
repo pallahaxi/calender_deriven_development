@@ -12,6 +12,8 @@ weight: 1
 categories: [""]
 tags: [""]
 ---
+https://mikiokubo.github.io/opt100/68packing.html
+
 # ビンパッキング問題
 ビンパッキング問題(bin packing problem; 箱詰め問題)は，以下のように定義される問題である．
 
