@@ -18,7 +18,7 @@ JuMPのチュートリアル[Getting started with JuMP](https://jump.dev/JuMP.jl
 
 まず非常に簡単な線形計画問題を1つ解いてみます。次の問題を考えます。
 
-![img](./static/getting_started_w_jump/lp1.png)
+{{< figure src="/docs/jump/static/getting_started_w_jump/lp1.png" title="" >}}
 
 
 
@@ -48,8 +48,7 @@ JuMPのチュートリアル[Getting started with JuMP](https://jump.dev/JuMP.jl
     print(f"売上={model.objective.value()}")
 
 結果はこのようになります。
-![img](./static/getting_started_w_jump/lp1_py.png)
-
+{{< figure src="/docs/jump/static/getting_started_w_jump/lp1_py.png" title="" >}}
 
 
 ## JuMP (Julia)
@@ -80,15 +79,14 @@ JuMPのチュートリアル[Getting started with JuMP](https://jump.dev/JuMP.jl
     @show objective_value(model)
 
 ちなみに、 `print(model)` でモデルとして設定した情報を見ることができます。
-![img](./static/getting_started_w_jump/printmodel.png)
+{{< figure src="/docs/jump/static/getting_started_w_jump/printmodel.png" title="" >}}
 結果はこの通りです。
-![img](./static/getting_started_w_jump/lp1_jl.png)
-
+{{< figure src="/docs/jump/static/getting_started_w_jump/lp1_jl.png" title="" >}}
 
 
 # ビンパッキング問題(整数計画問題)
 
-![img](./static/getting_started_w_jump/lip1.png)
+{{< figure src="/docs/jump/static/getting_started_w_jump/lip1.png" title="" >}}
 
 問題文：
 
@@ -129,7 +127,7 @@ JuMPのチュートリアル[Getting started with JuMP](https://jump.dev/JuMP.jl
     print(f"y = {[y[i].value() for i in range(N_BOX)]}")
     print(f"Objective value = {model2.objective.value()}")
 
-![img](./static/getting_started_w_jump/lip1/py.png)
+{{< figure src="/docs/jump/static/getting_started_w_jump/lip1_py.png" title="" >}}
 どの箱を選ぶか、というところに不定性はあると思いますが、同一の箱に詰め込むアイテムの組み合わせと7個の箱を使用する、という最小値が求まりました。
 
 ## JuMP (Julia)
@@ -170,9 +168,9 @@ Pythonとの大きな違いは次の2つかと思います。
     Juliaでは連立不等式を行列とベクトルの積として表すことができ、数式からのコーディングを直感的に行うことができます。
 
 結果を見てみます。行列の全成分を見るのは大変なので、 x の値が1になる成分を呼び出してみます。
-![img](./static/getting_started_w_jump/value_x.png)
+{{< figure src="/docs/jump/static/getting_started_w_jump/value_x.png" title="" >}}
 次に y の成分を確認します。
-![img](./static/getting_started_w_jump/value_y.png)
+{{< figure src="/docs/jump/static/getting_started_w_jump/value_y.png" title="" >}}
 数えてみると、使われた箱の数が7個であることがわかります。
 
 箱の中に1つだけ入っているものはどうでもいいとして、同一の箱に入った組み合わせをPython、Juliaそれぞれで確認してみると、
