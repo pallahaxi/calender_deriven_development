@@ -7,14 +7,12 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language><atom:link href="https://pallahaxi.github.io/calender_deriven_development/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Getting Started W Jump</title>
-      <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/</link>
-      <pubDate>Tue, 24 Aug 2021 20:42:37 +0900</pubDate>
+      <title>N-Queens</title>
+      <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/</link>
+      <pubDate>Tue, 12 Oct 2021 20:40:39 +0900</pubDate>
       
-      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/</guid>
-      <description>JuMPのチュートリアルGetting started with JuMPを見ながら簡単なビンパッキング問題を解いたものを紹介します。該当ページとは異なる内容となりますが、Pythonの PuLP と比較しながら行います。
-線形計画問題 #  まず非常に簡単な線形計画問題を1つ解いてみます。次の問題を考えます。
- PuLP (Python) #  import pulp as pp # モデル定義 model = pp.LpProblem(name=&#39;reidai&#39;, sense=pp.LpMaximize) # 決定変数を定義 x1 = pp.LpVariable(name=&#39;x1&#39;, lowBound=0, upBound=None, cat=&#39;Continuous&#39;) x2 = pp.LpVariable(name=&#39;x2&#39;, lowBound=0, upBound=None, cat=&#39;Continuous&#39;) # 目的関数を実装 model += 3*x1 + 2*x2 # 制約条件 model += 2*x1 + 5*x2 &amp;lt;= 500 model += 4*x1 + 2*x2 &amp;lt;= 300 # 解を求める model.solve() print(f&amp;quot;x1={x1.value()}, x2={x2.value()}&amp;quot;) print(f&amp;quot;売上={model.objective.value()}&amp;quot;)  結果はこのようになります。  JuMP (Julia) #  ここではソルバーとして GLPK パッケージの GLPK.</description>
+      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/</guid>
+      <description>Nクイーン問題を最適化問題としてときます</description>
     </item>
     
     <item>
