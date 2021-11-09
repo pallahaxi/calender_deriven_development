@@ -7,6 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language><atom:link href="https://pallahaxi.github.io/calender_deriven_development/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>N-Queens</title>
+      <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/</link>
+      <pubDate>Tue, 12 Oct 2021 20:40:39 +0900</pubDate>
+      
+      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/</guid>
+      <description>Nクイーン問題を最適化問題としてときます</description>
+    </item>
+    
+    <item>
+      <title>The Diet Problem</title>
+      <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/the_Diet_problem/</link>
+      <pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/jump/the_Diet_problem/</guid>
+      <description>線形最適化によって、栄養基準を満たす食事を求めるチュートリアルです。</description>
+    </item>
+    
+    <item>
       <title>Sudoku</title>
       <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/Sudoku/</link>
       <pubDate>Tue, 18 May 2021 21:09:22 +0900</pubDate>
