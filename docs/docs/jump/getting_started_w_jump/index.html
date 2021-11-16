@@ -5,23 +5,19 @@
   <meta name="generator" content="Hugo 0.89.0" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="JuMPのチュートリアルGetting started with JuMPを見ながら簡単なビンパッキング問題を解いたものを紹介します。該当ページとは異なる内容となりますが、Pythonの PuLP と比較しながら行います。
-線形計画問題 #  まず非常に簡単な線形計画問題を1つ解いてみます。次の問題を考えます。
- PuLP (Python) #  import pulp as pp # モデル定義 model = pp.LpProblem(name=&#39;reidai&#39;, sense=pp.LpMaximize) # 決定変数を定義 x1 = pp.LpVariable(name=&#39;x1&#39;, lowBound=0, upBound=None, cat=&#39;Continuous&#39;) x2 = pp.LpVariable(name=&#39;x2&#39;, lowBound=0, upBound=None, cat=&#39;Continuous&#39;) # 目的関数を実装 model &#43;= 3*x1 &#43; 2*x2 # 制約条件 model &#43;= 2*x1 &#43; 5*x2 &lt;= 500 model &#43;= 4*x1 &#43; 2*x2 &lt;= 300 # 解を求める model.solve() print(f&quot;x1={x1.value()}, x2={x2.value()}&quot;) print(f&quot;売上={model.objective.value()}&quot;)  結果はこのようになります。  JuMP (Julia) #  ここではソルバーとして GLPK パッケージの GLPK.">
+<meta name="description" content="JuMPのチュートリアルを見ながら簡単なビンパッキング問題を解いたものを紹介します。">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Getting Started W Jump" />
-<meta property="og:description" content="JuMPのチュートリアルGetting started with JuMPを見ながら簡単なビンパッキング問題を解いたものを紹介します。該当ページとは異なる内容となりますが、Pythonの PuLP と比較しながら行います。
-線形計画問題 #  まず非常に簡単な線形計画問題を1つ解いてみます。次の問題を考えます。
- PuLP (Python) #  import pulp as pp # モデル定義 model = pp.LpProblem(name=&#39;reidai&#39;, sense=pp.LpMaximize) # 決定変数を定義 x1 = pp.LpVariable(name=&#39;x1&#39;, lowBound=0, upBound=None, cat=&#39;Continuous&#39;) x2 = pp.LpVariable(name=&#39;x2&#39;, lowBound=0, upBound=None, cat=&#39;Continuous&#39;) # 目的関数を実装 model &#43;= 3*x1 &#43; 2*x2 # 制約条件 model &#43;= 2*x1 &#43; 5*x2 &lt;= 500 model &#43;= 4*x1 &#43; 2*x2 &lt;= 300 # 解を求める model.solve() print(f&quot;x1={x1.value()}, x2={x2.value()}&quot;) print(f&quot;売上={model.objective.value()}&quot;)  結果はこのようになります。  JuMP (Julia) #  ここではソルバーとして GLPK パッケージの GLPK." />
+<meta property="og:description" content="JuMPのチュートリアルを見ながら簡単なビンパッキング問題を解いたものを紹介します。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" /><meta property="article:section" content="docs" />
-<meta property="article:published_time" content="2021-08-24T20:42:37+09:00" />
-<meta property="article:modified_time" content="2021-09-21T20:57:29+09:00" />
+<meta property="article:published_time" content="2021-11-16T20:32:58+09:00" />
+<meta property="article:modified_time" content="2021-09-21T21:28:02+09:00" />
 
 <title>Getting Started W Jump | Juliaで数理最適化</title>
 <link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
 <link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css">
-<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.58b808d54ab8d395bff57f51a4c27af89bf8725c375917cd3974ec92a90c8525.js"></script>
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.b99343c73f63d28a1bb72a22159ddffae9416b8b14a97fbfdeeb39a508a4b49d.js"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -139,7 +135,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/" class="">N-Queens</a>
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" class=" active">Getting Started W Jump</a>
   
 
         </li>
@@ -152,7 +148,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" class=" active">Getting Started W Jump</a>
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/" class="">N-Queens</a>
   
 
         </li>

@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.88.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="JuMP.jl パッケージの使い方・チュートリアルについてのページ">
@@ -15,7 +15,7 @@
 <link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
 <link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css">
-<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.ed9d0b6c6a46f5de4071cfeac6d352190685081c22ae48905c1dfebae4d07b9c.js"></script>
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.b99343c73f63d28a1bb72a22159ddffae9416b8b14a97fbfdeeb39a508a4b49d.js"></script>
 <link rel="alternate" type="application/rss+xml" href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/index.xml" title="Juliaで数理最適化" />
 <!--
 Made with Book Theme
@@ -135,6 +135,19 @@ https://github.com/alex-shpak/hugo-book
 
   
     <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" class="">Getting Started W Jump</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/" class="">N-Queens</a>
   
 
         </li>
@@ -277,9 +290,14 @@ https://github.com/alex-shpak/hugo-book
     <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/">Getting Started W Jump</a>
   </dt>
   <dd>
-    JuMPのチュートリアルGetting started with JuMPを見ながら簡単なビンパッキング問題を解いたものを紹介します。該当ページとは異なる内容となりますが、Pythonの PuLP と比較しながら行います。
-線形計画問題 #  まず非常に簡単な線形計画問題を1つ解いてみます。次の問題を考えます。
- PuLP (Python) #  import pulp as pp # モデル定義 model = pp.LpProblem(name='reidai', sense=pp.LpMaximize) # 決定変数を定義 x1 = pp.LpVariable(name='x1', lowBound=0, upBound=None, cat='Continuous') x2 = pp.LpVariable(name='x2', lowBound=0, upBound=None, cat='Continuous') # 目的関数を実装 model += 3*x1 + 2*x2 # 制約条件 model += 2*x1 + 5*x2 &lt;= 500 model += 4*x1 + 2*x2 &lt;= 300 # 解を求める model.solve() print(f&quot;x1={x1.value()}, x2={x2.value()}&quot;) print(f&quot;売上={model.objective.value()}&quot;)  結果はこのようになります。  JuMP (Julia) #  ここではソルバーとして GLPK パッケージの GLPK.
+    JuMPのチュートリアルを見ながら簡単なビンパッキング問題を解いたものを紹介します。
+  </dd>
+
+  <dt>
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/">N-Queens</a>
+  </dt>
+  <dd>
+    Nクイーン問題を最適化問題としてときます
   </dd>
 
   <dt>
