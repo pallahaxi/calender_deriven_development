@@ -53,12 +53,8 @@ import LinearAlgebra
 {{< /katex >}}
 
 
-今回下記画像のようなネットワークを考えます。
-
-{{< figure src="https://jump.dev/JuMP.jl/stable/assets/g1.svg" title="JuMPチュートリアルより転載" >}}
-
-上記のような有向グラフを隣接行列 {{< katex >}}G{{< /katex >}} で表現します。
-この {{< katex >}}G{{< /katex >}} に基づくバイナリ変数を定義します。ここでは [リンク1](https://jump.dev/JuMP.jl/stable/tutorials/Getting%20started/variables_constraints_objective/#Arrays) と [リンク2](https://jump.dev/JuMP.jl/stable/tutorials/Getting%20started/variables_constraints_objective/#Binary-variables) を組み合わせることで変数を定義します。
+今回考えるネットワークを隣接行列 {{< katex >}}G{{< /katex >}} で表現します。
+この {{< katex >}}G{{< /katex >}} に基づくバイナリ変数を定義します。ここでは [リンク1](https://jump.dev/JuMP.jl/stable/tutorials/getting_started/getting_started_with_JuMP/#Arrays) と [リンク2](https://jump.dev/JuMP.jl/stable/tutorials/getting_started/getting_started_with_JuMP/#Binary-variables) を組み合わせることで変数を定義します。
 
 ```julia
 G = [
@@ -111,7 +107,7 @@ JuMP.Containers.SparseAxisArray{ConstraintRef{Model, MathOptInterface.Constraint
   [5, 4]  =  x[5,4] = 0.0
 ```
 
-さらに各頂点に関してフローの保存則を下記のように宣言します。
+さらに各節点に関してフローの保存則を下記のように宣言します。
 
 ```julia
 @constraint(
@@ -166,7 +162,7 @@ optimize!(shortest_path)
 objective_value(shortest_path)
 ```
 
-結果の表示
+最小化問題最適化の結果、下記のような有向グラフで表現されるネットワークが得られました。
 
 ```julia
 value.(x)
@@ -199,7 +195,6 @@ s.t. && \sum_{\{j|(i,j) \in A\}} y_{i,j} = 1 && \forall i = \{1,2....n\} \\
 \end{aligned}
 {{< /katex >}}
 
-{{< figure src="https://jump.dev/JuMP.jl/stable/assets/g2.svg" title="JuMPチュートリアルより転載" >}}
 
 ```julia
 G = [
@@ -222,8 +217,7 @@ assignment = Model(GLPK.Optimizer)
  y[4,1]  y[4,2]  y[4,3]  y[4,4]
 ```
 
-上記の元で一人に対し一つの仕事をアサインします。  
-One person can only be assigned to one object
+上記の元で一人に対し一つの仕事をアサインします。
 
 ```julia
 @constraint(assignment, [i = 1:n], sum(y[:, i]) == 1)
@@ -236,8 +230,7 @@ One person can only be assigned to one object
  y[1,4] + y[2,4] + y[3,4] + y[4,4] = 1.0
 ```
 
-逆に一つの仕事に一人しかアサインできない制約を追加します。  
-One object can only be assigned to one person
+逆に一つの仕事に一人しかアサインできない制約を追加します。
 
 ```julia
 @constraint(assignment, [j = 1:n], sum(y[j, :]) == 1)
@@ -261,11 +254,9 @@ value.(y)
 ```
 
 ## The Max-Flow Problem
-In the max-flow problem, we have a graph with two special nodes: the $source$,
-denoted by $s$, and the $sink$, denoted by $t$.
+最大流問題では本ページのはじめにある、コストの最小値を求める問題が最短経路問題と同様、source( {{< katex >}}s{{< /katex >}} )とsink( {{< katex >}}t{{< /katex >}} )が存在します。
 
-The objective is to move as much flow as possible from $s$ into $t$ while
-observing the capacity constraints.
+最適化の目的関数は、容量制限を守りながら、 {{< katex >}}s{{< /katex >}} から {{< katex >}}t{{< /katex >}} にできるだけ多くのフローを流すことです。
 
 {{< katex display >}}
 \begin{aligned}
@@ -275,8 +266,6 @@ s.t. && \sum_{u:(u,v) \in E} f(u,v)  = \sum_{w:(v,w) \in E} f(v,w) && \forall v 
 && f(u,v) \geq 0 && \forall (u,v) \in E
 \end{aligned}
 {{< /katex >}}
-
-{{< figure src="https://jump.dev/JuMP.jl/stable/assets/g3.svg" title="JuMPチュートリアルより転載" >}}
 
 ```julia
 G = [
@@ -308,7 +297,7 @@ max_flow = Model(GLPK.Optimizer)
  f[8,1]  f[8,2]  f[8,3]  f[8,4]  f[8,5]  f[8,6]  f[8,7]  f[8,8]
 ```
 
-Capacity constraints
+ネットワークの容量に関する制約を下記のように課します。
 
 ```julia
 @constraint(max_flow, [i = 1:n, j = 1:n], f[i, j] <= G[i, j])
@@ -325,7 +314,7 @@ Capacity constraints
  f[8,1] ≤ 0.0  f[8,2] ≤ 0.0  f[8,3] ≤ 0.0  f[8,4] ≤ 0.0  f[8,5] ≤ 0.0  f[8,6] ≤ 0.0  f[8,7] ≤ 0.0  f[8,8] ≤ 0.0
 ```
 
-Flow conservation constraints
+次にフローの保存則を下記のように課します。
 
 ```julia
 @constraint(max_flow, [i = 1:n; i != 1 && i != 8], sum(f[i, :]) == sum(f[:, i]))
