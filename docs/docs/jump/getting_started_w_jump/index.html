@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.89.0" />
+  <meta name="generator" content="Hugo 0.82.0" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="JuMPのチュートリアルを見ながら簡単なビンパッキング問題を解いたものを紹介します。">
@@ -10,14 +10,14 @@
 <meta property="og:description" content="JuMPのチュートリアルを見ながら簡単なビンパッキング問題を解いたものを紹介します。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" /><meta property="article:section" content="docs" />
-<meta property="article:published_time" content="2021-11-16T20:32:58+09:00" />
-<meta property="article:modified_time" content="2021-11-16T21:28:03+09:00" />
+<meta property="article:published_time" content="2021-11-16T20:32:58&#43;09:00" />
+<meta property="article:modified_time" content="2021-11-16T21:28:03&#43;09:00" />
 
 <title>Getting Started W Jump | Juliaで数理最適化</title>
 <link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
 <link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css">
-<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.b99343c73f63d28a1bb72a22159ddffae9416b8b14a97fbfdeeb39a508a4b49d.js"></script>
+<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css">
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.bf4661a45f937f686cd0893d99233135ad90d7f57a93bc73f353393002e4f8b8.js"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,6 +174,19 @@ https://github.com/alex-shpak/hugo-book
   
 
   
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/network_flow/" class="">Network Flow</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
     <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/Sudoku/" class="">Sudoku</a>
   
 
@@ -292,7 +305,8 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#%e7%b7%9a%e5%bd%a2%e8%a8%88%e7%94%bb%e5%95%8f%e9%a1%8c">#</a>
 </h1>
 <p>まず非常に簡単な線形計画問題を1つ解いてみます。次の問題を考えます。</p>
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lp1.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lp1.png"/> 
 </figure>
 
 <h2 id="pulp-python">
@@ -323,7 +337,8 @@ print(f&quot;x1={x1.value()}, x2={x2.value()}&quot;)
 print(f&quot;売上={model.objective.value()}&quot;)
 </code></pre>
 <p>結果はこのようになります。
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lp1_py.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lp1_py.png"/> 
 </figure>
 </p>
 <h2 id="jump-julia">
@@ -355,18 +370,21 @@ optimize!(model)
 @show objective_value(model)
 </code></pre>
 <p>ちなみに、 <code>print(model)</code> でモデルとして設定した情報を見ることができます。
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/printmodel.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/printmodel.png"/> 
 </figure>
 
 結果はこの通りです。
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lp1_jl.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lp1_jl.png"/> 
 </figure>
 </p>
 <h1 id="ビンパッキング問題整数計画問題">
   ビンパッキング問題(整数計画問題)
   <a class="anchor" href="#%e3%83%93%e3%83%b3%e3%83%91%e3%83%83%e3%82%ad%e3%83%b3%e3%82%b0%e5%95%8f%e9%a1%8c%e6%95%b4%e6%95%b0%e8%a8%88%e7%94%bb%e5%95%8f%e9%a1%8c">#</a>
 </h1>
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lip1.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lip1.png"/> 
 </figure>
 
 <p>問題文：</p>
@@ -421,7 +439,8 @@ for key in x.keys():
 print(f&quot;y = {[y[i].value() for i in range(N_BOX)]}&quot;)
 print(f&quot;Objective value = {model2.objective.value()}&quot;)
 </code></pre>
-<p><figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lip1_py.png"/>
+<p><figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/lip1_py.png"/> 
 </figure>
 
 どの箱を選ぶか、というところに不定性はあると思いますが、同一の箱に詰め込むアイテムの組み合わせと7個の箱を使用する、という最小値が求まりました。</p>
@@ -465,11 +484,13 @@ Pythonでは行列の変数をタプル <code>(i,j)</code> を key とした辞�
 Juliaでは連立不等式を行列とベクトルの積として表すことができ、数式からのコーディングを直感的に行うことができます。</li>
 </ul>
 <p>結果を見てみます。行列の全成分を見るのは大変なので、 x の値が1になる成分を呼び出してみます。
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/value_x.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/value_x.png"/> 
 </figure>
 
 次に y の成分を確認します。
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/value_y.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/getting_started_w_jump/value_y.png"/> 
 </figure>
 
 数えてみると、使われた箱の数が7個であることがわかります。</p>

@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.89.0" />
+  <meta name="generator" content="Hugo 0.82.0" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Nクイーン問題を最適化問題としてときます">
@@ -10,14 +10,14 @@
 <meta property="og:description" content="Nクイーン問題を最適化問題としてときます" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/" /><meta property="article:section" content="docs" />
-<meta property="article:published_time" content="2021-10-12T20:40:39+09:00" />
-<meta property="article:modified_time" content="2021-11-09T21:41:20+09:00" />
+<meta property="article:published_time" content="2021-10-12T20:40:39&#43;09:00" />
+<meta property="article:modified_time" content="2021-11-09T21:41:20&#43;09:00" />
 
 <title>N-Queens | Juliaで数理最適化</title>
 <link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
 <link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css">
-<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.b99343c73f63d28a1bb72a22159ddffae9416b8b14a97fbfdeeb39a508a4b49d.js"></script>
+<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css">
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.bf4661a45f937f686cd0893d99233135ad90d7f57a93bc73f353393002e4f8b8.js"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,6 +174,19 @@ https://github.com/alex-shpak/hugo-book
   
 
   
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/network_flow/" class="">Network Flow</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
     <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/Sudoku/" class="">Sudoku</a>
   
 
@@ -288,7 +301,8 @@ https://github.com/alex-shpak/hugo-book
 </span>
  マスのチェス盤にN個のクイーンをお互いに取ることがでないよう配置する問題です。
 例えば以下の図のような配置は4クイーン問題の解になります。
-<figure><img src="https://jump.dev/JuMP.jl/stable/assets/n_queens4.png"/><figcaption>
+<figure>
+    <img src="https://jump.dev/JuMP.jl/stable/assets/n_queens4.png"/> <figcaption>
             <h4>JuMPチュートリアルより転載</h4>
         </figcaption>
 </figure>
@@ -304,7 +318,7 @@ https://github.com/alex-shpak/hugo-book
 </span>
  行列を考えて、この行列の各成分をチェス盤に対応させます。
 成分が1のときそのマスにはクイーンが置かれてある状態、0のときは駒がない状態を表すことで、この問題は整数計画問題となります。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> JuMP
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> JuMP
 <span style="color:#66d9ef">import</span> GLPK
 <span style="color:#66d9ef">import</span> LinearAlgebra
 
@@ -316,38 +330,42 @@ model <span style="color:#f92672">=</span> Model(GLPK<span style="color:#f92672"
   \( 8 \times 8 \)
 </span>
  行列 <code>x</code> です。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@variable</span>(model, x[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>N, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>N], Bin)
-</code></pre></div><figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/n_queens/variable.png"/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@variable</span>(model, x[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>N, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>N], Bin)
+</code></pre></div><figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/n_queens/variable.png"/> 
 </figure>
 
 <p>制約条件を与えます。各行・各列には1つのクイーンしか置けないので、</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#75715e"># 各行・列でクイーンが唯一つ存在する</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#75715e"># 各行・列でクイーンが唯一つ存在する</span>
 <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>N
   <span style="color:#a6e22e">@constraint</span>(model, sum(x[i,<span style="color:#f92672">:</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
   <span style="color:#a6e22e">@constraint</span>(model, sum(x[<span style="color:#f92672">:</span>,i]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>また、各斜め方向にも1つのクイーンしか置けないので、</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#75715e"># 任意の斜線にクイーンが唯一つ存在する</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#75715e"># 任意の斜線にクイーンが唯一つ存在する</span>
 <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#f92672">-</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">:</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
   <span style="color:#a6e22e">@constraint</span>(model, sum(LinearAlgebra<span style="color:#f92672">.</span>diag(x,i)) <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span>)
   <span style="color:#a6e22e">@constraint</span>(model, sum(LinearAlgebra<span style="color:#f92672">.</span>diag(reverse(x, dims <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>), i)) <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span>)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>制約条件はこれだけなので、解を求めます。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">optimize!(model)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">optimize!(model)
 </code></pre></div><p>得られた解を見てみます。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">solution <span style="color:#f92672">=</span> convert<span style="color:#f92672">.</span>(<span style="color:#66d9ef">Int</span>, value<span style="color:#f92672">.</span>(x))
-</code></pre></div><figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/n_queens/solution1.png"/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">solution <span style="color:#f92672">=</span> convert<span style="color:#f92672">.</span>(<span style="color:#66d9ef">Int</span>, value<span style="color:#f92672">.</span>(x))
+</code></pre></div><figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/n_queens/solution1.png"/> 
 </figure>
 
 <p>この解をチェス盤で表示するとこれに対応します。
-<figure><img src="https://jump.dev/JuMP.jl/stable/assets/n_queens.png"/><figcaption>
+<figure>
+    <img src="https://jump.dev/JuMP.jl/stable/assets/n_queens.png"/> <figcaption>
             <h4>JuMPチュートリアルより転載</h4>
         </figcaption>
 </figure>
 </p>
 <p>8クイーン問題には92種類の異なる解が存在します(らしいです)。
 再び解を <code>optimize!</code> で求め直すと別の解が得られます。</p>
-<figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/n_queens/solution2.png"/>
+<figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/jump/static/n_queens/solution2.png"/> 
 </figure>
 
 </article>
