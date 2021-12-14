@@ -107,7 +107,7 @@ JuMP.Containers.SparseAxisArray{ConstraintRef{Model, MathOptInterface.Constraint
   [5, 4]  =  x[5,4] = 0.0
 ```
 
-さらに各節点に関してフローの保存則を下記のように宣言します。
+さらに各節点に関してフローの保存則を下記のように宣言します(sourceとsinkを除く)。
 
 ```julia
 @constraint(
@@ -217,7 +217,7 @@ assignment = Model(GLPK.Optimizer)
  y[4,1]  y[4,2]  y[4,3]  y[4,4]
 ```
 
-上記の元で一人に対し一つの仕事をアサインします。
+上記の元で一人に対し一つの物をアサインします。
 
 ```julia
 @constraint(assignment, [i = 1:n], sum(y[:, i]) == 1)
@@ -230,7 +230,8 @@ assignment = Model(GLPK.Optimizer)
  y[1,4] + y[2,4] + y[3,4] + y[4,4] = 1.0
 ```
 
-逆に一つの仕事に一人しかアサインできない制約を追加します。
+逆に一つの物に一人しかアサインできない制約を追加します。  
+その上で、最大化問題を解かせます。
 
 ```julia
 @constraint(assignment, [j = 1:n], sum(y[j, :]) == 1)
@@ -242,6 +243,7 @@ objective_value(assignment)
 ```
 20.0
 ```
+結果下記のようなネットワークが算出されました。
 ```julia
 value.(y)
 ```
@@ -314,7 +316,9 @@ max_flow = Model(GLPK.Optimizer)
  f[8,1] ≤ 0.0  f[8,2] ≤ 0.0  f[8,3] ≤ 0.0  f[8,4] ≤ 0.0  f[8,5] ≤ 0.0  f[8,6] ≤ 0.0  f[8,7] ≤ 0.0  f[8,8] ≤ 0.0
 ```
 
-次にフローの保存則を下記のように課します。
+次にフローの保存則を下記のように課します。  
+その上で、最大化問題を解かせます。
+
 
 ```julia
 @constraint(max_flow, [i = 1:n; i != 1 && i != 8], sum(f[i, :]) == sum(f[:, i]))
@@ -326,6 +330,7 @@ objective_value(max_flow)
 ```
 6.0
 ```
+結果下記のようなネットワークが算出されました。
 
 ```julia
 value.(f)
