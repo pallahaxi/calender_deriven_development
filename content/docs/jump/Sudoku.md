@@ -22,7 +22,7 @@ Originally Contributed by: Iain Dunning
 3. 各列で1~9の数字を必ず1回登場させます
 
 本チュートリアルでは下記の数独を解きます
-{{< figure src="https://jump.dev/JuMP.jl/stable/assets/partial_sudoku.svg" title="JuMPチュートリアルより転載" >}}
+{{< figure src="https://jump.dev/JuMP.jl/stable/assets/partial_sudoku.png" title="JuMPチュートリアルより転載" >}}
 
 正確には数独は目的関数を最適化する問題ではなく、Feasibility Problemと呼ばれる問題になります。
 具体的には今回の問題は全ての変数を0-1のバイナリ値として記述し、整数問題として解くことができます。
@@ -365,4 +365,4 @@ sol
 ```
 
 解を図示したものが下記になります。
-{{< figure src="https://jump.dev/JuMP.jl/stable/assets/full_sudoku.svg" title="JuMPチュートリアルより転載" >}}
+{{< figure src="https://jump.dev/JuMP.jl/stable/assets/full_sudoku.png" title="JuMPチュートリアルより転載" >}}
