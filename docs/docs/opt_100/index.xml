@@ -24,5 +24,14 @@
       <description>第k最短路と &lt;code&gt;LightGraph.jl&lt;/code&gt; による無向グラフの列挙と多目的最短路</description>
     </item>
     
+    <item>
+      <title>Diet_problem</title>
+      <link>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/diet_problem/</link>
+      <pubDate>Tue, 17 Aug 2021 20:51:54 +0900</pubDate>
+      
+      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/diet_problem/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

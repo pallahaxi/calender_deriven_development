@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.89.0" />
+  <meta name="generator" content="Hugo 0.82.0" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="第k最短路と LightGraph.jl による無向グラフの列挙と多目的最短路">
@@ -10,14 +10,14 @@
 <meta property="og:description" content="第k最短路と LightGraph.jl による無向グラフの列挙と多目的最短路" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/" /><meta property="article:section" content="docs" />
-<meta property="article:published_time" content="2021-05-02T18:00:30+09:00" />
-<meta property="article:modified_time" content="2021-05-06T21:05:35+09:00" />
+<meta property="article:published_time" content="2021-05-02T18:00:30&#43;09:00" />
+<meta property="article:modified_time" content="2021-05-06T21:05:35&#43;09:00" />
 
 <title>最短路の列挙 | Juliaで数理最適化</title>
 <link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
 <link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css">
-<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.b99343c73f63d28a1bb72a22159ddffae9416b8b14a97fbfdeeb39a508a4b49d.js"></script>
+<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css">
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.ebb0a1ab37ad75a542f350f2d963e78f106746e13e5a803063efb00624227a87.js"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -106,6 +106,8 @@ https://github.com/alex-shpak/hugo-book
         </li>
       
     
+      
+    
   </ul>
 
         </li>
@@ -127,6 +129,19 @@ https://github.com/alex-shpak/hugo-book
 
           
   <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/portfolio_optimization/" class="">Portfolio Optimization</a>
+  
+
+        </li>
+      
     
       
         <li>
@@ -291,7 +306,7 @@ https://github.com/alex-shpak/hugo-book
   最短経路の列挙
   <a class="anchor" href="#%e6%9c%80%e7%9f%ad%e7%b5%8c%e8%b7%af%e3%81%ae%e5%88%97%e6%8c%99">#</a>
 </h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> Cairo
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> Cairo
 <span style="color:#66d9ef">using</span> Colors
 <span style="color:#66d9ef">using</span> Compose
 <span style="color:#66d9ef">using</span> GraphPlot
@@ -312,10 +327,10 @@ https://github.com/alex-shpak/hugo-book
  最短路のアルゴリズムが含まれている。これは、最短路を短い（費用の小さい）順に列挙してくれる。</p>
 <p>Jin Y. Yen, “Finding the K Shortest Loopless Paths in a Network”, Management Science, Vol. 17, No. 11, Theory Series (Jul., 1971), pp. 712-716.</p>
 <p>まずは2次元格子状のネットワークを構築する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> generate_grid(node_num_array<span style="color:#f92672">::</span><span style="color:#66d9ef">Union</span>{<span style="color:#66d9ef">Tuple</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#66d9ef">Real</span>},<span style="color:#66d9ef">Array</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#ae81ff">1</span>}},
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> generate_grid(node_num_array<span style="color:#f92672">::</span><span style="color:#66d9ef">Union</span>{<span style="color:#66d9ef">Tuple</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#66d9ef">Real</span>},<span style="color:#66d9ef">Array</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#ae81ff">1</span>}},
                        random_range<span style="color:#f92672">::</span><span style="color:#66d9ef">Union</span>{<span style="color:#66d9ef">UnitRange</span>{<span style="color:#f92672">&lt;:</span><span style="color:#66d9ef">Real</span>}, <span style="color:#66d9ef">Array</span>{<span style="color:#f92672">&lt;:</span><span style="color:#66d9ef">Real</span>,<span style="color:#ae81ff">1</span>}}<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>,
-                       plot_flag<span style="color:#f92672">::</span><span style="color:#66d9ef">Bool</span><span style="color:#f92672">=</span>false,
-                       file_name<span style="color:#f92672">::</span><span style="color:#66d9ef">String</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid.png&#34;</span>)
+                       plot_flag<span style="color:#f92672">::</span><span style="color:#66d9ef">Bool</span><span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>,
+                       file_name<span style="color:#f92672">::</span>String<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid.png&#34;</span>)
     <span style="color:#a6e22e">@assert</span> length(node_num_array) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>
 
     grid_graph <span style="color:#f92672">=</span> grid(node_num_array) <span style="color:#75715e"># gridで格子状のエッジを構築</span>
@@ -341,7 +356,7 @@ https://github.com/alex-shpak/hugo-book
 <span style="color:#66d9ef">end</span>
 
 <span style="color:#75715e"># edgeの並びを整理する関数</span>
-<span style="color:#66d9ef">function</span> ordered_edges(graph<span style="color:#f92672">::</span><span style="color:#66d9ef">LightGraphs</span><span style="color:#f92672">.</span>AbstractGraph)
+<span style="color:#66d9ef">function</span> ordered_edges(graph<span style="color:#f92672">::</span>LightGraphs<span style="color:#f92672">.</span>AbstractGraph)
     edge_dict <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dict</span>{<span style="color:#66d9ef">Tuple</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#66d9ef">Real</span>}, <span style="color:#66d9ef">Any</span>}()
     <span style="color:#66d9ef">for</span> e <span style="color:#66d9ef">in</span> edges(graph)
         edge_dict[(src(e), dst(e))] <span style="color:#f92672">=</span> e
@@ -351,54 +366,55 @@ https://github.com/alex-shpak/hugo-book
 
 <span style="color:#66d9ef">const</span> node_num_array <span style="color:#f92672">=</span> [<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">5</span>]
 
-<span style="color:#66d9ef">const</span> g <span style="color:#f92672">=</span> generate_grid(node_num_array, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>, true);
-</code></pre></div><figure class="center"><img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid.png"/>
+<span style="color:#66d9ef">const</span> g <span style="color:#f92672">=</span> generate_grid(node_num_array, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>, <span style="color:#66d9ef">true</span>);
+</code></pre></div><figure class="center">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid.png"/> 
 </figure>
 
 <p>ここで <code>LightGraph.jl</code> が用意している <code>edges</code> 関数が返す順序とグラフ可視化のための <code>gplot</code> 関数の <code>edgelabel</code> に渡す順序が一致しないことに注意する。
 <code>edgelabel</code> ではlexicographic orderingに従う (<a href="https://github.com/JuliaGraphs/GraphPlot.jl/issues/70">https://github.com/JuliaGraphs/GraphPlot.jl/issues/70</a>)。
 そのため、ここではラベルの順序を一時的に整理する <code>orderd_edges</code> 関数を用意した。</p>
 <p>Yenのアルゴリズムは下記のように呼び出す。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">yen_k_shortest_paths(g, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">25</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">yen_k_shortest_paths(g, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">25</span>)
 </code></pre></div><p>出力としては</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">LightGraphs<span style="color:#f92672">.</span><span style="color:#66d9ef">YenState</span>{<span style="color:#66d9ef">Float64</span>, <span style="color:#66d9ef">Int64</span>}([<span style="color:#ae81ff">33.0</span>], [[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>]])
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">LightGraphs<span style="color:#f92672">.</span>YenState{<span style="color:#66d9ef">Float64</span>, <span style="color:#66d9ef">Int64</span>}([<span style="color:#ae81ff">33.0</span>], [[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>]])
 </code></pre></div><p>と、最短ルートを1つ出力します。第<span>
   \(k\)
 </span>
 最短経路を出力するには</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
 yen_state <span style="color:#f92672">=</span> yen_k_shortest_paths(g, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">25</span>, weights(g), k);
 <span style="color:#66d9ef">for</span> (p, d) <span style="color:#66d9ef">in</span> zip(yen_state<span style="color:#f92672">.</span>paths, yen_state<span style="color:#f92672">.</span>dists)
     println(<span style="color:#e6db74">&#34;path: </span><span style="color:#e6db74">$p</span><span style="color:#e6db74">, dists: </span><span style="color:#e6db74">$d</span><span style="color:#e6db74">&#34;</span>)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>のように実行する。しかし、現在のところ何点か <code>yen_k_shortest_paths</code> 関数にはバグが存在する。実際、上記の実行結果では同じエッジがk回出力されてしまう。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
 </code></pre></div><p>同様のバグ(<a href="https://github.com/JuliaGraphs/LightGraphs.jl/issues/1505">リンク</a>)が報告されている。同じ費用の経路がある場合に2度同じ経路が出力されてしまうというバグである。これらは <code>LightGraphs.jl</code> のサブモジュールである <code>SimpleWeightedGraphs.jl</code> の <code>rem_edge!</code> のバグ(<a href="https://github.com/JuliaGraphs/SimpleWeightedGraphs.jl/issues/66">リンク</a>)に起因する。<br>
 今回の原因となっている <code>SimpleWeightedgraphs</code> を避けて対応すれば良いので、以下のように実行する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
 yen_state <span style="color:#f92672">=</span> yen_k_shortest_paths(SimpleGraph(g), <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">25</span>, weights(g), k);
 <span style="color:#66d9ef">for</span> (p, d) <span style="color:#66d9ef">in</span> zip(yen_state<span style="color:#f92672">.</span>paths, yen_state<span style="color:#f92672">.</span>dists)
     println(<span style="color:#e6db74">&#34;path: </span><span style="color:#e6db74">$p</span><span style="color:#e6db74">, dists: </span><span style="color:#e6db74">$d</span><span style="color:#e6db74">&#34;</span>)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>下記のように期待する出力が得られる。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">33.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">35.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">35.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">36.0</span>
 path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">18</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">24</span>, <span style="color:#ae81ff">25</span>], dists<span style="color:#f92672">:</span> <span style="color:#ae81ff">37.0</span>
 </code></pre></div><p>同様に有効グラフの場合にも <code>SimpleDiGraph</code> でキャストして実行すれば良い。型に応じて多重ディスパッチで対応すれば <code>yen_k_shortest_paths</code> 関数のバグは修正できるはずである。
 可視化と最短経路を同時に得るため、下記の関数を定義する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> grid_yen_shortest_path(graph<span style="color:#f92672">::</span><span style="color:#66d9ef">SimpleWeightedGraph</span>,
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> grid_yen_shortest_path(graph<span style="color:#f92672">::</span>SimpleWeightedGraph,
                                 node_num_array<span style="color:#f92672">::</span><span style="color:#66d9ef">Union</span>{<span style="color:#66d9ef">Tuple</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#66d9ef">Real</span>},<span style="color:#66d9ef">Array</span>{<span style="color:#66d9ef">Int</span>,<span style="color:#ae81ff">1</span>}},
                                 source<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>,
                                 target<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>;
                                 k_path<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
-                                plot_flag<span style="color:#f92672">::</span><span style="color:#66d9ef">Bool</span><span style="color:#f92672">=</span>false,
-                                file_name<span style="color:#f92672">::</span><span style="color:#66d9ef">String</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid_shortest_path.png&#34;</span>)
+                                plot_flag<span style="color:#f92672">::</span><span style="color:#66d9ef">Bool</span><span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>,
+                                file_name<span style="color:#f92672">::</span>String<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid_shortest_path.png&#34;</span>)
     <span style="color:#a6e22e">@assert</span> length(node_num_array) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>
 
     shortest_path <span style="color:#f92672">=</span> yen_k_shortest_paths(SimpleGraph(graph), source, target,
@@ -411,9 +427,9 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
         vcat([i <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>node_num_array[<span style="color:#ae81ff">1</span>], j <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>node_num_array[<span style="color:#ae81ff">2</span>]]<span style="color:#f92672">...</span>))
     locs_y <span style="color:#f92672">=</span> <span style="color:#66d9ef">Array</span>{<span style="color:#66d9ef">Float64</span>, <span style="color:#ae81ff">1</span>}(
         vcat([j <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>node_num_array[<span style="color:#ae81ff">1</span>], j <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>node_num_array[<span style="color:#ae81ff">2</span>]]<span style="color:#f92672">...</span>))
-    colors <span style="color:#f92672">=</span> [<span style="color:#e6db74">colorant</span><span style="color:#e6db74">&#34;lightgray&#34;</span> <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>ne(graph)];
+    colors <span style="color:#f92672">=</span> [colorant<span style="color:#e6db74">&#34;lightgray&#34;</span> <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>ne(graph)];
     node_piar <span style="color:#f92672">=</span> <span style="color:#66d9ef">Set</span>{<span style="color:#66d9ef">Set</span>}()
-    <span style="color:#66d9ef">for</span> (num, (i, j)) <span style="color:#66d9ef">in</span> enumerate(zip(paths[k_path][begin<span style="color:#f92672">:</span>end<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>],
+    <span style="color:#66d9ef">for</span> (num, (i, j)) <span style="color:#66d9ef">in</span> enumerate(zip(paths[k_path][<span style="color:#66d9ef">begin</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>],
                                        paths[k_path][<span style="color:#66d9ef">begin</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span>]))
         push!(node_piar, <span style="color:#66d9ef">Set</span>([i, j]))
     <span style="color:#66d9ef">end</span>
@@ -421,7 +437,7 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
     <span style="color:#66d9ef">if</span> plot_flag
         <span style="color:#66d9ef">for</span> (num, e) <span style="color:#66d9ef">in</span> enumerate(ordered_edges(graph))
             <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">Set</span>([src(e), dst(e)]) <span style="color:#66d9ef">in</span> node_piar
-                colors[num] <span style="color:#f92672">=</span> <span style="color:#e6db74">colorant</span><span style="color:#e6db74">&#34;orange&#34;</span>
+                colors[num] <span style="color:#f92672">=</span> colorant<span style="color:#e6db74">&#34;orange&#34;</span>
             <span style="color:#66d9ef">end</span>
         <span style="color:#66d9ef">end</span>
 
@@ -435,13 +451,15 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
     <span style="color:#66d9ef">end</span>
     <span style="color:#66d9ef">return</span> dists, paths
 <span style="color:#66d9ef">end</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">d, p <span style="color:#f92672">=</span> grid_yen_shortest_path(g, node_num_array, <span style="color:#ae81ff">1</span>, nv(g), k_path<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, plot_flag<span style="color:#f92672">=</span>true)
-</code></pre></div><figure class="center"><img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid_shortest_path.png"/>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">d, p <span style="color:#f92672">=</span> grid_yen_shortest_path(g, node_num_array, <span style="color:#ae81ff">1</span>, nv(g), k_path<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, plot_flag<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>)
+</code></pre></div><figure class="center">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid_shortest_path.png"/> 
 </figure>
 
 <p>この際の距離 <code>d</code> は <code>33.0</code> であった。さらに、第2最短経路の場合には下記のように実行する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">d, p <span style="color:#f92672">=</span> grid_yen_shortest_path(g, node_num_array, <span style="color:#ae81ff">1</span>, nv(g), k_path<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, plot_flag<span style="color:#f92672">=</span>true, file_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid_shortest_path_second.png&#34;</span>)
-</code></pre></div><figure class="center"><img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid_shortest_path_second.png"/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">d, p <span style="color:#f92672">=</span> grid_yen_shortest_path(g, node_num_array, <span style="color:#ae81ff">1</span>, nv(g), k_path<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, plot_flag<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>, file_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grid_shortest_path_second.png&#34;</span>)
+</code></pre></div><figure class="center">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/grid_shortest_path_second.png"/> 
 </figure>
 
 <p>この際の距離 <code>d[end]</code> は <code>35.0</code> であった。</p>
@@ -453,8 +471,8 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 一方、 <code>networkx</code> の <code>all_simple_paths</code> に対応する関数のプルリクが挙がっている。<br>
 <a href="https://github.com/JuliaGraphs/LightGraphs.jl/pull/1540">https://github.com/JuliaGraphs/LightGraphs.jl/pull/1540</a></p>
 <p>もし <code>all_simple_paths</code> が実装されれば対応する処理ができると思われる。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#75715e"># !!実装されていない関数であり、下記の関数は動きません!!</span>
-<span style="color:#66d9ef">function</span> all_paths_count(g<span style="color:#f92672">::</span><span style="color:#66d9ef">AbstractGraph</span>, source<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#75715e"># !!実装されていない関数であり、下記の関数は動きません!!</span>
+<span style="color:#66d9ef">function</span> all_paths_count(g<span style="color:#f92672">::</span>AbstractGraph, source<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>)
     c <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
     <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>nv(g)
         <span style="color:#66d9ef">if</span> source <span style="color:#f92672">==</span> i
@@ -471,9 +489,9 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 </h2>
 <p>閉路の列挙には <code>simplecycles_limited_length</code> 関数を用いる。
 まず閉路の列挙のため、新規でグラフを生成する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> generate_random_complete_graph(n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>,
-                                        plot_flag<span style="color:#f92672">::</span><span style="color:#66d9ef">Bool</span><span style="color:#f92672">=</span>false,
-                                        file_name<span style="color:#f92672">::</span><span style="color:#66d9ef">String</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;random_complete_graph.png&#34;</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> generate_random_complete_graph(n<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>,
+                                        plot_flag<span style="color:#f92672">::</span><span style="color:#66d9ef">Bool</span><span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>,
+                                        file_name<span style="color:#f92672">::</span>String<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;random_complete_graph.png&#34;</span>)
     x <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dict</span>(i <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>rand(<span style="color:#66d9ef">Float64</span>) <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n)
     y <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dict</span>(i <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">100</span><span style="color:#f92672">*</span>rand(<span style="color:#66d9ef">Float64</span>) <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n)
     G <span style="color:#f92672">=</span> SimpleWeightedGraph(n)
@@ -501,20 +519,21 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
     <span style="color:#66d9ef">return</span> G, locs_x, locs_y
 <span style="color:#66d9ef">end</span>
 
-<span style="color:#66d9ef">struct</span> <span style="color:#66d9ef">Point</span>
+<span style="color:#66d9ef">struct</span> Point
     x<span style="color:#f92672">::</span><span style="color:#66d9ef">Float64</span>
     y<span style="color:#f92672">::</span><span style="color:#66d9ef">Float64</span>
 <span style="color:#66d9ef">end</span>
 
-<span style="color:#66d9ef">function</span> distance(p₁<span style="color:#f92672">::</span><span style="color:#66d9ef">Point</span>, p₂<span style="color:#f92672">::</span><span style="color:#66d9ef">Point</span>)
+<span style="color:#66d9ef">function</span> distance(p₁<span style="color:#f92672">::</span>Point, p₂<span style="color:#f92672">::</span>Point)
     sqrt((p₁<span style="color:#f92672">.</span>x <span style="color:#f92672">-</span> p₂<span style="color:#f92672">.</span>x)<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> (p₁<span style="color:#f92672">.</span>y <span style="color:#f92672">-</span> p₂<span style="color:#f92672">.</span>y)<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>)
 <span style="color:#66d9ef">end</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">G, locs_x, locs_y <span style="color:#f92672">=</span> generate_random_complete_graph(<span style="color:#ae81ff">10</span>, true);
-</code></pre></div><figure class="center"><img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/random_complete_graph.png"/>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">G, locs_x, locs_y <span style="color:#f92672">=</span> generate_random_complete_graph(<span style="color:#ae81ff">10</span>, <span style="color:#66d9ef">true</span>);
+</code></pre></div><figure class="center">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/random_complete_graph.png"/> 
 </figure>
 
 <p><code>simplecycles_limited_length</code> 関数は下記のように利用する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">simplecycles_limited_length(G, <span style="color:#ae81ff">3</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">simplecycles_limited_length(G, <span style="color:#ae81ff">3</span>)
 </code></pre></div><p>
 <div class="book-expand">
   <label>
@@ -524,7 +543,7 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
     </div>
     <input type="checkbox" class="hidden" />
     <div class="book-expand-content markdown-inner">
-      <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#ae81ff">285</span><span style="color:#f92672">-</span>element <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int64</span>}}<span style="color:#f92672">:</span>
+      <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#ae81ff">285</span><span style="color:#f92672">-</span>element <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int64</span>}}<span style="color:#f92672">:</span>
  [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>]
  [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>]
  [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>]
@@ -551,7 +570,7 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
  [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">7</span>]
  [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>]
  [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">9</span>]
- <span style="color:#f92672">⋮</span>
+ ⋮
  [<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">7</span>]
  [<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>]
  [<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">10</span>]
@@ -594,30 +613,30 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 
 であり、上記の出力数と一致している。</p>
 <p><code>simplecycles_limited_length</code> を用いて閉路を検出する関数を用意する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> detect_cycle(g<span style="color:#f92672">::</span><span style="color:#66d9ef">AbstractGraph</span>,
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> detect_cycle(g<span style="color:#f92672">::</span>AbstractGraph,
                       source<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>,
                       len<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>)
     [i <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> simplecycles_limited_length(g, len) <span style="color:#66d9ef">if</span> length(i) <span style="color:#f92672">&gt;</span> len<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> i[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> source]
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>閉路を検出し、同時に可視化もまとめた関数を下記のように用意した。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> cycle_plot(G<span style="color:#f92672">::</span><span style="color:#66d9ef">AbstractGraph</span>,
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">function</span> cycle_plot(G<span style="color:#f92672">::</span>AbstractGraph,
                     source<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>,
                     len<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>,
                     locs_x<span style="color:#f92672">::</span><span style="color:#66d9ef">Vector</span>,
                     locs_y<span style="color:#f92672">::</span><span style="color:#66d9ef">Vector</span>,
-                    file_name<span style="color:#f92672">::</span><span style="color:#66d9ef">String</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cycle_plot.png&#34;</span>)
+                    file_name<span style="color:#f92672">::</span>String<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cycle_plot.png&#34;</span>)
     paths <span style="color:#f92672">=</span> detect_cycle(G, source, len)
     path <span style="color:#f92672">=</span> paths[rand(<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>length(paths))] <span style="color:#75715e"># 1つサンプル</span>
     node_piar <span style="color:#f92672">=</span> <span style="color:#66d9ef">Set</span>{<span style="color:#66d9ef">Set</span>}()
-    <span style="color:#66d9ef">for</span> (num, (i, j)) <span style="color:#66d9ef">in</span> enumerate(zip(path[begin<span style="color:#f92672">:</span>end<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], path[<span style="color:#66d9ef">begin</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span>]))
+    <span style="color:#66d9ef">for</span> (num, (i, j)) <span style="color:#66d9ef">in</span> enumerate(zip(path[<span style="color:#66d9ef">begin</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], path[<span style="color:#66d9ef">begin</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span>]))
         push!(node_piar, <span style="color:#66d9ef">Set</span>([i, j]))
     <span style="color:#66d9ef">end</span>
     node_piar[<span style="color:#66d9ef">end</span>] <span style="color:#f92672">=</span> (path[<span style="color:#66d9ef">begin</span>], path[<span style="color:#66d9ef">end</span>])
 
-    colors <span style="color:#f92672">=</span> [<span style="color:#e6db74">colorant</span><span style="color:#e6db74">&#34;lightgray&#34;</span> <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>ne(G)]
+    colors <span style="color:#f92672">=</span> [colorant<span style="color:#e6db74">&#34;lightgray&#34;</span> <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>ne(G)]
     <span style="color:#66d9ef">for</span> (num, e) <span style="color:#66d9ef">in</span> enumerate(ordered_edges(G))
         <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">Set</span>([src(e), dst(e)]) <span style="color:#66d9ef">in</span> node_piar
-            colors[num] <span style="color:#f92672">=</span> <span style="color:#e6db74">colorant</span><span style="color:#e6db74">&#34;orange&#34;</span>
+            colors[num] <span style="color:#f92672">=</span> colorant<span style="color:#e6db74">&#34;orange&#34;</span>
         <span style="color:#66d9ef">end</span>
     <span style="color:#66d9ef">end</span>
     draw(
@@ -629,8 +648,9 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
     )
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>実行結果は下記の通りである。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">cycle_plot(G, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, locs_x, locs_y)
-</code></pre></div><figure class="center"><img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/cycle_plot.png"/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">cycle_plot(G, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, locs_x, locs_y)
+</code></pre></div><figure class="center">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/cycle_plot.png"/> 
 </figure>
 
 <h2 id="hamilton閉路">
@@ -779,56 +799,57 @@ path<span style="color:#f92672">:</span> [<span style="color:#ae81ff">1</span>, 
 
 これを2目的の最短路問題に適用してみよう。格子グラフの枝に２つの重み（costとtime）を定義して、スカラー化を用いて、有効フロンティアを描画する。</p>
 <p>まずは元サイトと同様のプロセスで格子状のグラフを作成する。各エッジに <code>:cost</code> と <code>:time</code> の属性を付与する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">const</span> m, n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">100</span>;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">const</span> m, n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">100</span>;
 <span style="color:#66d9ef">const</span> lb, ub <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">100</span>;
 mg <span style="color:#f92672">=</span> MetaGraph(grid([m, n]));
 <span style="color:#66d9ef">for</span> e <span style="color:#66d9ef">in</span> edges(mg)
-    set_prop!(mg, e, <span style="color:#e6db74">:cost</span>, rand(lb<span style="color:#f92672">:</span>ub))
-    set_prop!(mg, e, <span style="color:#e6db74">:time</span>, <span style="color:#ae81ff">100</span><span style="color:#f92672">/</span>get_prop(mg, e, <span style="color:#e6db74">:cost</span>))
+    set_prop!(mg, e, <span style="color:#f92672">:</span>cost, rand(lb<span style="color:#f92672">:</span>ub))
+    set_prop!(mg, e, <span style="color:#f92672">:</span>time, <span style="color:#ae81ff">100</span><span style="color:#f92672">/</span>get_prop(mg, e, <span style="color:#f92672">:</span>cost))
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>最短経路を解くようにする</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">x, y <span style="color:#f92672">=</span> <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}(), <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Float64</span>}()
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">x, y <span style="color:#f92672">=</span> <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}(), <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Float64</span>}()
 <span style="color:#66d9ef">for</span> k <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span><span style="color:#ae81ff">99</span>
     α <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span> <span style="color:#f92672">*</span> k
     <span style="color:#66d9ef">for</span> e <span style="color:#66d9ef">in</span> edges(mg)
-        set_prop!(mg, e, <span style="color:#e6db74">:weight</span>,
-                  α <span style="color:#f92672">*</span> get_prop(mg, e, <span style="color:#e6db74">:cost</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> α) <span style="color:#f92672">*</span> get_prop(mg, e, <span style="color:#e6db74">:time</span>))
+        set_prop!(mg, e, <span style="color:#f92672">:</span>weight,
+                  α <span style="color:#f92672">*</span> get_prop(mg, e, <span style="color:#f92672">:</span>cost) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> α) <span style="color:#f92672">*</span> get_prop(mg, e, <span style="color:#f92672">:</span>time))
     <span style="color:#66d9ef">end</span>
     dijk <span style="color:#f92672">=</span> dijkstra_shortest_paths(mg, <span style="color:#ae81ff">1</span>, weights(mg))
     cost, time <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>
     j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
     <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> enumerate_paths(dijk, m <span style="color:#f92672">*</span> n)[<span style="color:#66d9ef">begin</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span>]
-        cost <span style="color:#f92672">+=</span> get_prop(mg, Edge(j, i), <span style="color:#e6db74">:cost</span>)
-        time <span style="color:#f92672">+=</span> get_prop(mg, Edge(j, i), <span style="color:#e6db74">:time</span>)
+        cost <span style="color:#f92672">+=</span> get_prop(mg, Edge(j, i), <span style="color:#f92672">:</span>cost)
+        time <span style="color:#f92672">+=</span> get_prop(mg, Edge(j, i), <span style="color:#f92672">:</span>time)
         j <span style="color:#f92672">=</span> i
     <span style="color:#66d9ef">end</span>
     push!(x, cost)
     push!(y, time)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>可視化</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">savefig(plot(x, y, line<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0.6</span>, <span style="color:#e6db74">:green</span>), marker<span style="color:#f92672">=</span>(<span style="color:#e6db74">:circle</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">0.8</span>, Plots<span style="color:#f92672">.</span>stroke(<span style="color:#ae81ff">0</span>), <span style="color:#e6db74">:green</span>), legend<span style="color:#f92672">=</span>false),
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">savefig(plot(x, y, line<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0.6</span>, <span style="color:#f92672">:</span>green), marker<span style="color:#f92672">=</span>(<span style="color:#f92672">:</span>circle, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">0.8</span>, Plots<span style="color:#f92672">.</span>stroke(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">:</span>green), legend<span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>),
         <span style="color:#e6db74">&#34;efficient_frontier.png&#34;</span>)
-</code></pre></div><figure><img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/efficient_frontier.png"/>
+</code></pre></div><figure>
+    <img src="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/static/k_shortest_paths/efficient_frontier.png"/> 
 </figure>
 
 <p>時間を測定するため関数化する。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> BenchmarkTools
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> BenchmarkTools
 
-<span style="color:#66d9ef">function</span> ef(input_graph<span style="color:#f92672">::</span><span style="color:#66d9ef">MetaGraph</span>)
+<span style="color:#66d9ef">function</span> ef(input_graph<span style="color:#f92672">::</span>MetaGraph)
     x, y <span style="color:#f92672">=</span> <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}(), <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Float64</span>}()
     <span style="color:#66d9ef">for</span> k <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span><span style="color:#ae81ff">99</span>
         α <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span> <span style="color:#f92672">*</span> k
         <span style="color:#66d9ef">for</span> e <span style="color:#66d9ef">in</span> edges(input_graph)
-            set_prop!(input_graph, e, <span style="color:#e6db74">:weight</span>,
-                      α <span style="color:#f92672">*</span> get_prop(input_graph, e, <span style="color:#e6db74">:cost</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> α) <span style="color:#f92672">*</span> get_prop(input_graph, e, <span style="color:#e6db74">:time</span>))
+            set_prop!(input_graph, e, <span style="color:#f92672">:</span>weight,
+                      α <span style="color:#f92672">*</span> get_prop(input_graph, e, <span style="color:#f92672">:</span>cost) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> α) <span style="color:#f92672">*</span> get_prop(input_graph, e, <span style="color:#f92672">:</span>time))
         <span style="color:#66d9ef">end</span>
         dijk <span style="color:#f92672">=</span> dijkstra_shortest_paths(input_graph, <span style="color:#ae81ff">1</span>, weights(input_graph))
         cost<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
         time<span style="color:#f92672">::</span><span style="color:#66d9ef">Float64</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
         j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
         <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> enumerate_paths(dijk, m <span style="color:#f92672">*</span> n)[<span style="color:#66d9ef">begin</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#66d9ef">end</span>]
-            cost <span style="color:#f92672">+=</span> get_prop(input_graph, Edge(j, i), <span style="color:#e6db74">:cost</span>)
-            time <span style="color:#f92672">+=</span> get_prop(input_graph, Edge(j, i), <span style="color:#e6db74">:time</span>)
+            cost <span style="color:#f92672">+=</span> get_prop(input_graph, Edge(j, i), <span style="color:#f92672">:</span>cost)
+            time <span style="color:#f92672">+=</span> get_prop(input_graph, Edge(j, i), <span style="color:#f92672">:</span>time)
             j <span style="color:#f92672">=</span> i
         <span style="color:#66d9ef">end</span>
         push!(x, cost)
@@ -839,7 +860,7 @@ mg <span style="color:#f92672">=</span> MetaGraph(grid([m, n]));
 
 <span style="color:#a6e22e">@benchmark</span> ef(mg)
 </code></pre></div><p>計測結果は</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">BenchmarkTools.Trial: 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">BenchmarkTools.Trial: 
   memory estimate:  3.69 GiB
   allocs estimate:  <span style="color:#ae81ff">37869799</span>
   --------------
@@ -851,7 +872,7 @@ mg <span style="color:#f92672">=</span> MetaGraph(grid([m, n]));
   samples:          <span style="color:#ae81ff">2</span>
   evals/sample:     <span style="color:#ae81ff">1</span>
 </code></pre></div><p>pythonでの時間の測定コードは下記となる。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> time <span style="color:#f92672">import</span> time <span style="color:#66d9ef">as</span> t
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> time <span style="color:#f92672">import</span> time <span style="color:#66d9ef">as</span> t
 
 start <span style="color:#f92672">=</span> t()
 x, y <span style="color:#f92672">=</span>[],[]
@@ -873,9 +894,9 @@ x, y <span style="color:#f92672">=</span>[],[]
     x<span style="color:#f92672">.</span>append(cost)
     y<span style="color:#f92672">.</span>append(time)
 process_time <span style="color:#f92672">=</span> t() <span style="color:#f92672">-</span> start
-print(process_time)
+<span style="color:#66d9ef">print</span>(process_time)
 </code></pre></div><p>測定結果は</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">28.481345653533936
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">28.481345653533936
 </code></pre></div><p>となった。およそ5倍と非常にJuliaのdijkstraアルゴリズムが高速であることがわかった。</p>
 <h2 id="すべての単純パスを列挙するアルゴリズム">
   すべての単純パスを列挙するアルゴリズム
