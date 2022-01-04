@@ -12,7 +12,7 @@ weight: 1
 categories: [""]
 tags: [""]
 ---
-JuMPのチュートリアル[Getting started with JuMP](https://jump.dev/JuMP.jl/stable/tutorials/Getting%20started/getting_started_with_JuMP/)を見ながら簡単なビンパッキング問題を解いたものを紹介します。該当ページとは異なる内容となりますが、Pythonの `PuLP` と比較しながら行います。
+JuMPのチュートリアル[Getting started with JuMP](https://jump.dev/JuMP.jl/stable/tutorials/getting_started/getting_started_with_JuMP/)を見ながら簡単なビンパッキング問題を解いたものを紹介します。該当ページとは異なる内容となりますが、Pythonの `PuLP` と比較しながら行います。
 
 # 線形計画問題
 
