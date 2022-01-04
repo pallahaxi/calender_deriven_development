@@ -20,5 +20,5 @@ enableGitInfo = true
 # [[menu.before]]
 [[menu.after]]
   name = "Python言語による実務で使える100+の最適化問題"
-  url = "https://mikiokubo.github.io/opt100/index.html"
+  url = "https://scmopt.github.io/opt100/index.html"
   weight = 10
