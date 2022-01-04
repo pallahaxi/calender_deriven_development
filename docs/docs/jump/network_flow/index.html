@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.82.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ネットワークのフロー問題">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Network Flow" />
+<meta property="og:description" content="ネットワークのフロー問題" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/jump/network_flow/" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2021-06-29T20:46:02&#43;09:00" />
+<meta property="article:modified_time" content="2021-12-14T20:48:37&#43;09:00" />
+
+<title>Network Flow | Juliaで数理最適化</title>
+<link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
+<link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css">
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.bf4661a45f937f686cd0893d99233135ad90d7f57a93bc73f353393002e4f8b8.js"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="https://pallahaxi.github.io/calender_deriven_development/"><span>Juliaで数理最適化</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-99b7fb9e4c50b6f8377df9e8c3a6819e" class="toggle"  />
+    <label for="section-99b7fb9e4c50b6f8377df9e8c3a6819e" class="flex justify-between">
+      <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/" class="">Opt 100</a>
+      <span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/maxflow/" class="">最大流問題</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/" class="">最短路の列挙</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-29da691489df965cd95d89e555abeb44" class="toggle" checked />
+    <label for="section-29da691489df965cd95d89e555abeb44" class="flex justify-between">
+      <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/" class="">JuMPチュートリアル</a>
+      <span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" class="">Getting Started W Jump</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/" class="">N-Queens</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/the_Diet_problem/" class="">The Diet Problem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/network_flow/" class=" active">Network Flow</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/Sudoku/" class="">Sudoku</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/Rocket_Control/" class="">Rocket Control</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://scmopt.github.io/opt100/index.html" target="_blank" rel="noopener">
+        Python言語による実務で使える100&#43;の最適化問題
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Network Flow</strong>
+
+  <label for="toc-control">
+    
+    <img src="https://pallahaxi.github.io/calender_deriven_development/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#network-flow">Network Flow</a>
+      <ul>
+        <li><a href="#the-shortest-path-problem">The Shortest Path Problem</a></li>
+        <li><a href="#the-assignment-problem">The Assignment Problem</a></li>
+        <li><a href="#the-max-flow-problem">The Max-Flow Problem</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="network-flow">
+  Network Flow
+  <a class="anchor" href="#network-flow">#</a>
+</h1>
+<p>Originally Contributed by: Arpit Bhatia</p>
+<p>グラフ理論において、フローネットワーク(輸送ネットワークとしても知られています)は各辺が容量を持つ有向グラフで表現され、各辺における各容量を超える量のフローを流さないように最適化を行う手法です。</p>
+<p>数理最適化の文脈では</p>
+<ul>
+<li>有効グラフ -&gt; ネットワーク</li>
+<li>頂点(vertex) -&gt; 節点(node)</li>
+<li>辺(edges) -&gt; 弧(arc)</li>
+</ul>
+<p>という言葉も使われます。</p>
+<p>フローの考え方では、sourceと呼ばれるフローの流出だけをする頂点とsinkと呼ばれる流入だけをする頂点以外の頂点では各頂点におけるフローの流入量と流出量を一致させて最適化を行います。</p>
+<p>このネットワークの考え方はコンピュータネットワークの通信制御や、パイプ内の流体、回路内の電流など、ネットワーク内の頂点間で何らかのやりとりがされるモデルの記述に用いられる概念です。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#66d9ef">using</span> JuMP
+<span style="color:#66d9ef">import</span> GLPK
+<span style="color:#66d9ef">import</span> LinearAlgebra
+</code></pre></div><h2 id="the-shortest-path-problem">
+  The Shortest Path Problem
+  <a class="anchor" href="#the-shortest-path-problem">#</a>
+</h2>
+<p>本問題では各弧 
+<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/katex/katex.min.css" />
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/katex/katex.min.js"></script>
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script><span>
+  \((i, j)\)
+</span>
+ にスカラー値であるコスト <span>
+  \(a_{i, j}\)
+</span>
+ と呼ばれる量が与えられており、任意の2頂点を繋ぐコストの合計を経路のコストとします。</p>
+<p>また、ここで定めた2頂点を繋ぐコストの最小値を求める問題が最短経路問題になります。</p>
+<span>
+  \[\begin{aligned}
+\min &amp; \sum_{\forall e(i,j) \in E} a_{i,j} \times x_{i,j}\\
+\text{s.t.} &amp;\quad b(i) = \sum_j x_{ij} - \sum_k x_{ki} =
+\begin{cases}
+1 &amp;\text{if}\ i\ \text{is the starting node(source),} \\
+-1 &amp;\text{if}\ i\ \text{is the ending node(sink),} \\
+0 &amp;\text{otherwise.}
+\end{cases}\\
+&amp; \quad x_{e} \in \{0, 1\} \qquad \forall e \in E
+\end{aligned}\]
+</span>
+
+<p>今回考えるネットワークを隣接行列 <span>
+  \(G\)
+</span>
+ で表現します。
+この <span>
+  \(G\)
+</span>
+ に基づくバイナリ変数を定義します。ここでは <a href="https://jump.dev/JuMP.jl/stable/tutorials/getting_started/getting_started_with_JuMP/#Arrays">リンク1</a> と <a href="https://jump.dev/JuMP.jl/stable/tutorials/getting_started/getting_started_with_JuMP/#Binary-variables">リンク2</a> を組み合わせることで変数を定義します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">G <span style="color:#f92672">=</span> [
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">100</span> <span style="color:#ae81ff">30</span>  <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span>;
+    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">20</span>  <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span>;
+    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">60</span>;
+    <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">15</span>  <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">50</span>;
+    <span style="color:#ae81ff">0</span>   <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">0</span>;
+]
+
+n <span style="color:#f92672">=</span> size(G)[<span style="color:#ae81ff">1</span>]
+
+shortest_path <span style="color:#f92672">=</span> Model(GLPK<span style="color:#f92672">.</span>Optimizer)
+
+<span style="color:#a6e22e">@variable</span>(shortest_path, x[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n], Bin)
+</code></pre></div><pre><code>5×5 Array{VariableRef,2}:
+ x[1,1]  x[1,2]  x[1,3]  x[1,4]  x[1,5]
+ x[2,1]  x[2,2]  x[2,3]  x[2,4]  x[2,5]
+ x[3,1]  x[3,2]  x[3,3]  x[3,4]  x[3,5]
+ x[4,1]  x[4,2]  x[4,3]  x[4,4]  x[4,5]
+ x[5,1]  x[5,2]  x[5,3]  x[5,4]  x[5,5]
+</code></pre><p>さらに隣接行列 <span>
+  \(G\)
+</span>
+ に従い制約式を宣言します。まず、弧が存在しないエッジ(<code>G == 0</code>)にはゼロコストを制約として課します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(shortest_path, [i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n, j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n; G[i,j] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>], x[i,j] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</code></pre></div><pre><code>JuMP.Containers.SparseAxisArray{ConstraintRef{Model, MathOptInterface.ConstraintIndex{MathOptInterface.ScalarAffineFunction{Float64}, MathOptInterface.EqualTo{Float64}}, ScalarShape}, 2, Tuple{Int64, Int64}} with 18 entries:
+  [3, 1]  =  x[3,1] = 0.0
+  [2, 5]  =  x[2,5] = 0.0
+  [1, 4]  =  x[1,4] = 0.0
+  [5, 5]  =  x[5,5] = 0.0
+  [3, 2]  =  x[3,2] = 0.0
+  [3, 3]  =  x[3,3] = 0.0
+  [4, 1]  =  x[4,1] = 0.0
+  [2, 1]  =  x[2,1] = 0.0
+  [1, 5]  =  x[1,5] = 0.0
+  [5, 1]  =  x[5,1] = 0.0
+  [2, 2]  =  x[2,2] = 0.0
+  [4, 3]  =  x[4,3] = 0.0
+  [4, 4]  =  x[4,4] = 0.0
+  [2, 4]  =  x[2,4] = 0.0
+  [1, 1]  =  x[1,1] = 0.0
+  [5, 2]  =  x[5,2] = 0.0
+  [5, 3]  =  x[5,3] = 0.0
+  [5, 4]  =  x[5,4] = 0.0
+</code></pre><p>さらに各節点に関してフローの保存則を下記のように宣言します(sourceとsinkを除く)。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(
+    shortest_path,
+    [i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n; i <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> i <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span>],
+    sum(x[i,<span style="color:#f92672">:</span>]) <span style="color:#f92672">==</span> sum(x[<span style="color:#f92672">:</span>,i])
+)
+</code></pre></div><pre><code>JuMP.Containers.SparseAxisArray{ConstraintRef{Model, MathOptInterface.ConstraintIndex{MathOptInterface.ScalarAffineFunction{Float64}, MathOptInterface.EqualTo{Float64}}, ScalarShape}, 1, Tuple{Int64}} with 3 entries:
+  [5]  =  x[5,1] + x[5,2] + x[5,3] + x[5,4] - x[1,5] - x[2,5] - x[3,5] - x[4,5] = 0.0
+  [4]  =  x[4,1] + x[4,2] + x[4,3] - x[1,4] - x[2,4] - x[3,4] - x[5,4] + x[4,5] = 0.0
+  [3]  =  x[3,1] + x[3,2] - x[1,3] - x[2,3] - x[4,3] - x[5,3] + x[3,4] + x[3,5] = 0.0
+</code></pre><p>最後にsourceとsinkに対する制限を宣言します。<br>
+まずsourceに関する制約は下記のようになります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(shortest_path, sum(x[<span style="color:#ae81ff">1</span>,<span style="color:#f92672">:</span>]) <span style="color:#f92672">-</span> sum(x[<span style="color:#f92672">:</span>,<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+</code></pre></div><pre><code>-x[2,1] - x[3,1] - x[4,1] - x[5,1] + x[1,2] + x[1,3] + x[1,4] + x[1,5] = 1.0
+</code></pre><p>上記で宣言した制約は下記の式のような制約と対応します。
+<span>
+  \[−x_{2,1} −x_{3,1} −x_{4,1} −x_{5,1} &#43;x_{1,2} &#43;x_{1,3} &#43;x_{1,4} &#43;x_{1,5} =1.0\]
+</span>
+</p>
+<p>sourceと同様にsinkに対する制約を下記のように宣言します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(shortest_path, sum(x[<span style="color:#ae81ff">2</span>,<span style="color:#f92672">:</span>]) <span style="color:#f92672">-</span> sum(x[<span style="color:#f92672">:</span>,<span style="color:#ae81ff">2</span>]) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</code></pre></div><pre><code>x[2,1] - x[1,2] - x[3,2] - x[4,2] - x[5,2] + x[2,3] + x[2,4] + x[2,5] = -1.0
+</code></pre><p>制約の宣言は以上となります。</p>
+<p>最後に目的関数を宣言します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@objective</span>(shortest_path, Min, LinearAlgebra<span style="color:#f92672">.</span>dot(G, x))
+</code></pre></div><p>ここまでのモデルを最適化します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">optimize!(shortest_path)
+objective_value(shortest_path)
+</code></pre></div><p>最小化問題最適化の結果、下記のような有向グラフで表現されるネットワークが得られました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">value<span style="color:#f92672">.</span>(x)
+</code></pre></div><pre><code>5×5 Matrix{Float64}:
+ 0.0  0.0  1.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  1.0  0.0
+ 0.0  1.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0
+</code></pre><h2 id="the-assignment-problem">
+  The Assignment Problem
+  <a class="anchor" href="#the-assignment-problem">#</a>
+</h2>
+<p>一対一でマッチングさせなければならない人 <span>
+  \(n\)
+</span>
+ と物 <span>
+  \(n\)
+</span>
+ を考えます。
+人 <span>
+  \(i\)
+</span>
+ と物 <span>
+  \(j\)
+</span>
+ をマッチングさせることで得られる収益 <span>
+  \(a_{i,j}\)
+</span>
+ があり、その収益の合計が最大になるように人と物を割り当てたいとします。</p>
+<p>また、人 <span>
+  \(i\)
+</span>
+ を物 <span>
+  \(j\)
+</span>
+ に割り当てることができるのは、 <span>
+  \((i, j)\)
+</span>
+ があるペアの集合 <span>
+  \(A\)
+</span>
+ に属するときだけという制約があります。</p>
+<p>数学的には、物 <span>
+  \(j_{1},\ldots,j_{n}\)
+</span>
+ がすべて異なるような、人と物のペア <span>
+  \((1, j_{1}),\ldots, (n, j_{n})\)
+</span>
+ の集合を <span>
+  \(A\)
+</span>
+ から見つけ、
+総利益 <span>
+  \(\sum_{i=1}^{y} a_{ij_{i}}\)
+</span>
+ が最大になるようにします。</p>
+<span>
+  \[\begin{aligned}
+\max &amp;&amp; \sum_{(i,j) \in A} a_{i,j} \times y_{i,j} \\
+s.t. &amp;&amp; \sum_{\{j|(i,j) \in A\}} y_{i,j} = 1 &amp;&amp; \forall i = \{1,2....n\} \\
+&amp;&amp; \sum_{\{i|(i,j) \in A\}} y_{i,j} = 1 &amp;&amp; \forall j = \{1,2....n\} \\
+&amp;&amp; y_{i,j} \in \{0,1\} &amp;&amp; \forall (i,j) \in \{1,2...k\}
+\end{aligned}\]
+</span>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">G <span style="color:#f92672">=</span> [
+    <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">3</span>
+    <span style="color:#ae81ff">7</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">5</span>
+]
+
+n <span style="color:#f92672">=</span> size(G)[<span style="color:#ae81ff">1</span>]
+
+assignment <span style="color:#f92672">=</span> Model(GLPK<span style="color:#f92672">.</span>Optimizer)
+<span style="color:#a6e22e">@variable</span>(assignment, y[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n], Bin)
+</code></pre></div><pre><code>4×4 Array{VariableRef,2}:
+ y[1,1]  y[1,2]  y[1,3]  y[1,4]
+ y[2,1]  y[2,2]  y[2,3]  y[2,4]
+ y[3,1]  y[3,2]  y[3,3]  y[3,4]
+ y[4,1]  y[4,2]  y[4,3]  y[4,4]
+</code></pre><p>上記の元で一人に対し一つの物をアサインします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(assignment, [i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n], sum(y[<span style="color:#f92672">:</span>, i]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+</code></pre></div><pre><code>4-element Array{ConstraintRef{Model,MathOptInterface.ConstraintIndex{MathOptInterface.ScalarAffineFunction{Float64},MathOptInterface.EqualTo{Float64}},ScalarShape},1}:
+ y[1,1] + y[2,1] + y[3,1] + y[4,1] = 1.0
+ y[1,2] + y[2,2] + y[3,2] + y[4,2] = 1.0
+ y[1,3] + y[2,3] + y[3,3] + y[4,3] = 1.0
+ y[1,4] + y[2,4] + y[3,4] + y[4,4] = 1.0
+</code></pre><p>逆に一つの物に一人しかアサインできない制約を追加します。<br>
+その上で、最大化問題を解かせます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(assignment, [j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n], sum(y[j, <span style="color:#f92672">:</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+<span style="color:#a6e22e">@objective</span>(assignment, Max, LinearAlgebra<span style="color:#f92672">.</span>dot(G, y))
+
+optimize!(assignment)
+objective_value(assignment)
+</code></pre></div><pre><code>20.0
+</code></pre><p>結果下記のようなネットワークが算出されました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">value<span style="color:#f92672">.</span>(y)
+</code></pre></div><pre><code>4×4 Array{Float64,2}:
+ 0.0  1.0  0.0  0.0
+ 0.0  0.0  1.0  0.0
+ 1.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  1.0
+</code></pre><h2 id="the-max-flow-problem">
+  The Max-Flow Problem
+  <a class="anchor" href="#the-max-flow-problem">#</a>
+</h2>
+<p>最大流問題では本ページのはじめにある、コストの最小値を求める問題が最短経路問題と同様、source( <span>
+  \(s\)
+</span>
+ )とsink( <span>
+  \(t\)
+</span>
+ )が存在します。</p>
+<p>最適化の目的関数は、容量制限を守りながら、 <span>
+  \(s\)
+</span>
+ から <span>
+  \(t\)
+</span>
+ にできるだけ多くのフローを流すことです。</p>
+<span>
+  \[\begin{aligned}
+\max &amp;&amp; \sum_{v:(s,v) \in E} f(s,v) \\
+s.t. &amp;&amp; \sum_{u:(u,v) \in E} f(u,v)  = \sum_{w:(v,w) \in E} f(v,w) &amp;&amp; \forall v \in V - \{s,t\} \\
+&amp;&amp; f(u,v) \leq c(u,v) &amp;&amp; \forall (u,v) \in E \\
+&amp;&amp; f(u,v) \geq 0 &amp;&amp; \forall (u,v) \in E
+\end{aligned}\]
+</span>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">G <span style="color:#f92672">=</span> [
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">4</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">4</span>
+    <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+]
+
+n <span style="color:#f92672">=</span> size(G)[<span style="color:#ae81ff">1</span>]
+
+max_flow <span style="color:#f92672">=</span> Model(GLPK<span style="color:#f92672">.</span>Optimizer)
+
+<span style="color:#a6e22e">@variable</span>(max_flow, f[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>)
+</code></pre></div><pre><code>8×8 Array{VariableRef,2}:
+ f[1,1]  f[1,2]  f[1,3]  f[1,4]  f[1,5]  f[1,6]  f[1,7]  f[1,8]
+ f[2,1]  f[2,2]  f[2,3]  f[2,4]  f[2,5]  f[2,6]  f[2,7]  f[2,8]
+ f[3,1]  f[3,2]  f[3,3]  f[3,4]  f[3,5]  f[3,6]  f[3,7]  f[3,8]
+ f[4,1]  f[4,2]  f[4,3]  f[4,4]  f[4,5]  f[4,6]  f[4,7]  f[4,8]
+ f[5,1]  f[5,2]  f[5,3]  f[5,4]  f[5,5]  f[5,6]  f[5,7]  f[5,8]
+ f[6,1]  f[6,2]  f[6,3]  f[6,4]  f[6,5]  f[6,6]  f[6,7]  f[6,8]
+ f[7,1]  f[7,2]  f[7,3]  f[7,4]  f[7,5]  f[7,6]  f[7,7]  f[7,8]
+ f[8,1]  f[8,2]  f[8,3]  f[8,4]  f[8,5]  f[8,6]  f[8,7]  f[8,8]
+</code></pre><p>ネットワークの容量に関する制約を下記のように課します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(max_flow, [i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n, j <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n], f[i, j] <span style="color:#f92672">&lt;=</span> G[i, j])
+</code></pre></div><pre><code>8×8 Array{ConstraintRef{Model,MathOptInterface.ConstraintIndex{MathOptInterface.ScalarAffineFunction{Float64},MathOptInterface.LessThan{Float64}},ScalarShape},2}:
+ f[1,1] ≤ 0.0  f[1,2] ≤ 3.0  f[1,3] ≤ 2.0  f[1,4] ≤ 2.0  f[1,5] ≤ 0.0  f[1,6] ≤ 0.0  f[1,7] ≤ 0.0  f[1,8] ≤ 0.0
+ f[2,1] ≤ 0.0  f[2,2] ≤ 0.0  f[2,3] ≤ 0.0  f[2,4] ≤ 0.0  f[2,5] ≤ 5.0  f[2,6] ≤ 1.0  f[2,7] ≤ 0.0  f[2,8] ≤ 0.0
+ f[3,1] ≤ 0.0  f[3,2] ≤ 0.0  f[3,3] ≤ 0.0  f[3,4] ≤ 0.0  f[3,5] ≤ 1.0  f[3,6] ≤ 3.0  f[3,7] ≤ 1.0  f[3,8] ≤ 0.0
+ f[4,1] ≤ 0.0  f[4,2] ≤ 0.0  f[4,3] ≤ 0.0  f[4,4] ≤ 0.0  f[4,5] ≤ 0.0  f[4,6] ≤ 1.0  f[4,7] ≤ 0.0  f[4,8] ≤ 0.0
+ f[5,1] ≤ 0.0  f[5,2] ≤ 0.0  f[5,3] ≤ 0.0  f[5,4] ≤ 0.0  f[5,5] ≤ 0.0  f[5,6] ≤ 0.0  f[5,7] ≤ 0.0  f[5,8] ≤ 4.0
+ f[6,1] ≤ 0.0  f[6,2] ≤ 0.0  f[6,3] ≤ 0.0  f[6,4] ≤ 0.0  f[6,5] ≤ 0.0  f[6,6] ≤ 0.0  f[6,7] ≤ 0.0  f[6,8] ≤ 2.0
+ f[7,1] ≤ 0.0  f[7,2] ≤ 0.0  f[7,3] ≤ 0.0  f[7,4] ≤ 0.0  f[7,5] ≤ 0.0  f[7,6] ≤ 0.0  f[7,7] ≤ 0.0  f[7,8] ≤ 4.0
+ f[8,1] ≤ 0.0  f[8,2] ≤ 0.0  f[8,3] ≤ 0.0  f[8,4] ≤ 0.0  f[8,5] ≤ 0.0  f[8,6] ≤ 0.0  f[8,7] ≤ 0.0  f[8,8] ≤ 0.0
+</code></pre><p>次にフローの保存則を下記のように課します。<br>
+その上で、最大化問題を解かせます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia"><span style="color:#a6e22e">@constraint</span>(max_flow, [i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n; i <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> i <span style="color:#f92672">!=</span> <span style="color:#ae81ff">8</span>], sum(f[i, <span style="color:#f92672">:</span>]) <span style="color:#f92672">==</span> sum(f[<span style="color:#f92672">:</span>, i]))
+<span style="color:#a6e22e">@objective</span>(max_flow, Max, sum(f[<span style="color:#ae81ff">1</span>, <span style="color:#f92672">:</span>]))
+
+optimize!(max_flow)
+objective_value(max_flow)
+</code></pre></div><pre><code>6.0
+</code></pre><p>結果下記のようなネットワークが算出されました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-julia" data-lang="julia">value<span style="color:#f92672">.</span>(f)
+</code></pre></div><pre><code>8×8 Array{Float64,2}:
+ 0.0  3.0  2.0  1.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  3.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  1.0  1.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  4.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  2.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+</code></pre></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#network-flow">Network Flow</a>
+      <ul>
+        <li><a href="#the-shortest-path-problem">The Shortest Path Problem</a></li>
+        <li><a href="#the-assignment-problem">The Assignment Problem</a></li>
+        <li><a href="#the-max-flow-problem">The Max-Flow Problem</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
