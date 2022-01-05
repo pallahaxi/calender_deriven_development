@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.85.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="線形最適化によって、栄養基準を満たす食事を求めるチュートリアルです。">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="The Diet Problem" />
+<meta property="og:description" content="線形最適化によって、栄養基準を満たす食事を求めるチュートリアルです。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pallahaxi.github.io/calender_deriven_development/docs/jump/the_Diet_problem/" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2021-08-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-08-10T23:14:04+09:00" />
+
+<title>The Diet Problem | Juliaで数理最適化</title>
+<link rel="manifest" href="https://pallahaxi.github.io/calender_deriven_development/manifest.json">
+<link rel="icon" href="https://pallahaxi.github.io/calender_deriven_development/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="https://pallahaxi.github.io/calender_deriven_development/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css">
+<script defer src="https://pallahaxi.github.io/calender_deriven_development/en.search.min.bb727fe59b01da3d3a34884fa2244e960ed0359194c499e8e00b9a819efa357a.js"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="https://pallahaxi.github.io/calender_deriven_development/"><span>Juliaで数理最適化</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-99b7fb9e4c50b6f8377df9e8c3a6819e" class="toggle"  />
+    <label for="section-99b7fb9e4c50b6f8377df9e8c3a6819e" class="flex justify-between">
+      <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/" class="">Opt 100</a>
+      <span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/maxflow/" class="">最大流問題</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/opt_100/k_shortest_paths/" class="">最短路の列挙</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-29da691489df965cd95d89e555abeb44" class="toggle" checked />
+    <label for="section-29da691489df965cd95d89e555abeb44" class="flex justify-between">
+      <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/" class="">JuMPチュートリアル</a>
+      <span>▾</span>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/" class="">Getting Started W Jump</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/n_queens/" class="">N-Queens</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/the_Diet_problem/" class=" active">The Diet Problem</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/network_flow/" class="">Network Flow</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/Sudoku/" class="">Sudoku</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/Rocket_Control/" class="">Rocket Control</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://scmopt.github.io/opt100/index.html" target="_blank" rel="noopener">
+        Python言語による実務で使える100&#43;の最適化問題
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="https://pallahaxi.github.io/calender_deriven_development/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>The Diet Problem</strong>
+
+  <label for="toc-control">
+    
+    <img src="https://pallahaxi.github.io/calender_deriven_development/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-diet-problem">The Diet Problem</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>本記事は、JuMPのチュートリアル<a href="https://jump.dev/JuMP.jl/stable/tutorials/Mixed-integer%20linear%20programs/diet/">The diet problem</a>を解説したものです。<br>
+オリジナルのチュートリアルには解説がないため、解説は当サイトが加えたものとなります。</p>
+<h1 id="the-diet-problem">
+  The Diet Problem
+  <a class="anchor" href="#the-diet-problem">#</a>
+</h1>
+<p>古典的な「栄養問題（diet problem; Stigler diet）」を解きます。
+栄養問題は、全米研究評議会の定める食事摂取量基準を満たしつつ、最小限のコストとなる食事の組み合わせを求めるという、線形最適化問題の代表例です。</p>
+<p>この問題の詳細や歴史的背景については<a href="https://en.wikipedia.org/wiki/Stigler_diet">Wikipedia</a>に詳しい記載があります。
+このチュートリアルで用いるデータ・解法は<a href="https://www.gurobi.com/documentation/9.0/examples/diet_cpp_cpp.html">Gurobiでの例</a>をベースとしています。
+コードの全容は<a href="https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl">こちら(GitHub)</a>にあります。以降、コードを適宜抜粋しながら解説します。</p>
+<p>まず、栄養基準を <code>category_data</code> に用意します。摂取すべき4つの栄養（カロリー、タンパク質、脂質、塩分）の上限値・下限値を定めています。<br>
+例えば、タンパク質の摂取下限は91.0、塩分の摂取上限は1779.0です。<br>
+値の確認に<code>Test</code>パッケージを使っていますが、説明は省略します。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=19:32&amp;footer=minimal"></script>
+<p>ここで利用している<code>Containers.DenseAxisArray</code>は、JuMPで利用できるデータ配列です。<br>
+Julia標準の配列や<code>DataFrames</code>のデータフレームを用いることもできますが、チュートリアルに従い<code>Containers</code>を利用します。<br>
+<code>DenseAxisArray</code>の引数には、順にデータ、第1軸（行）の軸ラベル、第2軸（列）の軸ラベルを与えており、データの呼び出しを容易にしています。</p>
+<p>続いて、9種の食品の価格と栄養成分を用意します。 <code>cost</code>に費用を、<code>food_data</code>に栄養素を定義しています。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=34:59&amp;footer=minimal"></script>
+<p>必要なデータが用意できたところで、モデルの構築に移ります。</p>
+<p>サンプルコードの通り、<code>@variables</code>マクロを用いることで複数の変数を同時に定義できます。
+決定変数として、栄養の下限・上限を満たす値が入る<code>nutrition</code>と、どの食事を購入するかの<code>buy</code>を用意します。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=60:67&amp;footer=minimal"></script>
+<p>コストの最小化が目的となるため、それに合致した目的関数を定義します。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=69:70&amp;footer=minimal"></script>
+<p>それぞれの栄養素が基準値の範囲内かどうかという制約を加えます。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=71:74&amp;footer=minimal"></script>
+<p>複数のカテゴリに対する制約を一度に定義しています。<br>
+第2引数にカテゴリ（<code>= c</code>）のリスト、第3引数にそのカテゴリ内での栄養素の合計がnutritionと同じになるというように表現しています。</p>
+<p><code>category_data[c, &quot;min&quot;] &lt;= sum(food_data[f, c] * buy[f] for f in foods) &lt;= category_data[c, &quot;max&quot;]</code>
+と同等の制約になります。</p>
+<p>モデルの定義は以上です。モデルを求解するには<code>optimize</code>関数を利用します。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=79:82&amp;footer=minimal"></script>
+<p>モデルが解を得られたかどうかは、モデルのステータスから確認できます。<br>
+ステータスは<code>termination_status</code>関数で確認することができ、解を得られている場合はスクリプトで別に定義している<code>print_solution</code>関数で表示できます。</p>
+<p>ステータスの判定に<code>MOI</code>を利用しています。これはJuMPに含まれている<code>MathOptInterface</code>パッケージのオブジェクトです。
+<code>MathOptInterface</code>は、数学的最適化ソルバーのための標準化されたAPIを提供します。JuMPのステータスもこれに従っているため、解が得られた（<code>MOI.OPTIMAL</code>）かどうかを判定することができます。</p>
+<pre><code>原題を求解中...
+結果:
+  hamburger = 0.6045138888888888
+  chicken = 0.0
+  hot dog = 0.0
+  fries = 0.0
+  macaroni = 0.0
+  pizza = 0.0
+  salad = 0.0
+  milk = 6.9701388888888935
+  ice cream = 2.591319444444441
+</code></pre><p>それぞれのカテゴリについて、摂取量が表示されています。<br>
+ほとんど牛乳から栄養を摂取すべき、という結果が得られていることがわかるかと思います。<br>
+そこで、乳製品（牛乳・アイスクリーム）の摂取量に制約を加えて再度求解してみましょう。</p>
+<script src="https://gist-it.appspot.com/https://github.com/pallahaxi/calender_deriven_development/blob/master/content/docs/jump/static/Diet_Problem/src.jl?slice=89:99&amp;footer=minimal"></script>
+<pre><code>乳製品の制約を加えた問題を求解中...
+結果:
+ソルバーは最適解を見つけられませんでした。
+</code></pre><p>こちらは解を見つけられませんでした。用意された食事では、栄養のほとんどを牛乳で賄う必要があるようですね。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-diet-problem">The Diet Problem</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
