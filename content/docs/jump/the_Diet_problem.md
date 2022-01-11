@@ -12,7 +12,7 @@ weight: 1
 categories: [""]
 tags: [""]
 ---
-本記事は、JuMPのチュートリアル[The diet problem](https://jump.dev/JuMP.jl/stable/tutorials/Mixed-integer%20linear%20programs/diet/)を解説したものです。  
+本記事は、JuMPのチュートリアル[The diet problem](https://jump.dev/JuMP.jl/stable/tutorials/linear/diet/)を解説したものです。  
 オリジナルのチュートリアルには解説がないため、解説は当サイトが加えたものとなります。
 
 
