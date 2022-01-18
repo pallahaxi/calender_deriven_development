@@ -2,7 +2,7 @@
 title: "Portfolio Optimization"
 date: 2021-12-07T20:15:51+09:00
 summary: "非線形最適化を用いてポートフォリオ最適化問題を解くチュートリアルです"
-draft: true
+draft: false
 weight: 1
 # bookFlatSection: false
 # bookToc: true
