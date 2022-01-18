@@ -7,6 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language><atom:link href="https://pallahaxi.github.io/calender_deriven_development/docs/jump/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Portfolio Optimization</title>
+      <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/portfolio_optimization/</link>
+      <pubDate>Tue, 07 Dec 2021 20:15:51 +0900</pubDate>
+      
+      <guid>https://pallahaxi.github.io/calender_deriven_development/docs/jump/portfolio_optimization/</guid>
+      <description>非線形最適化を用いてポートフォリオ最適化問題を解くチュートリアルです</description>
+    </item>
+    
+    <item>
       <title>Getting Started W Jump</title>
       <link>https://pallahaxi.github.io/calender_deriven_development/docs/jump/getting_started_w_jump/</link>
       <pubDate>Tue, 16 Nov 2021 20:32:58 +0900</pubDate>
